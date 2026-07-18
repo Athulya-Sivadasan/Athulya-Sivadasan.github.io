@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Athulya Sivadasan | Embedded Systems & Edge AI Engineer</title>
-<meta name="description" content="Portfolio of Athulya Sivadasan — Electronics & Communication Engineering student specializing in Embedded Systems, IoT, and Edge AI.">
+<meta name="description" content="Portfolio of Athulya Sivadasan — Electronics & Communication Engineering student specializing in Edge AI, Embedded Systems & IoT, VLSI, and Robotics.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -14,7 +14,6 @@
   --bg-panel:#0E1524;
   --surface:#141D30;
   --surface-hi:#1B2740;
-  --border:#24304a20;
   --border-line:#22304A;
   --copper:#C88A4F;
   --copper-bright:#E8AD73;
@@ -39,7 +38,6 @@ body{
 }
 ::selection{background:var(--copper);color:#0A0E17}
 
-/* ambient circuit background */
 .bg-grid{
   position:fixed; inset:0; z-index:0; pointer-events:none;
   background-image:
@@ -48,6 +46,35 @@ body{
   background-size:42px 42px;
   mask-image:radial-gradient(ellipse 90% 60% at 50% 0%, black 0%, transparent 75%);
 }
+
+/* cursor glow */
+.cursor-glow{
+  position:fixed; width:420px; height:420px; border-radius:50%; z-index:0; pointer-events:none;
+  background:radial-gradient(circle, rgba(92,232,212,0.05), transparent 70%);
+  transform:translate(-50%,-50%); transition:opacity 0.4s ease; left:0; top:0; opacity:0;
+}
+
+/* signature: vertical power-trace showing scroll progress */
+.power-rail{
+  position:fixed; left:22px; top:50%; transform:translateY(-50%); z-index:60;
+  display:flex; flex-direction:column; align-items:center; gap:0;
+  height:46vh;
+}
+.power-rail .rail-line{
+  width:2px; flex:1; background:var(--border-line); position:relative; border-radius:2px; overflow:hidden;
+}
+.power-rail .rail-fill{
+  position:absolute; left:0; top:0; width:100%; height:0%;
+  background:linear-gradient(var(--copper), var(--signal));
+  transition:height 0.15s linear;
+  box-shadow:0 0 10px var(--signal);
+}
+.power-rail .rail-node{
+  width:8px; height:8px; border-radius:50%; background:var(--border-line); border:1px solid var(--muted-dim);
+  transition:background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.power-rail .rail-node.active{ background:var(--signal); border-color:var(--signal); box-shadow:0 0 10px var(--signal) }
+@media(max-width:1100px){ .power-rail{display:none} }
 
 h1,h2,h3{font-family:'Space Grotesk',sans-serif; font-weight:600; letter-spacing:-0.01em}
 .mono{font-family:'JetBrains Mono',monospace}
@@ -62,7 +89,6 @@ a{color:inherit}
 .container{max-width:var(--maxw); margin:0 auto; padding:0 6%; position:relative; z-index:1}
 section{padding:110px 0}
 
-/* nav */
 nav{
   position:sticky; top:0; z-index:50;
   background:rgba(8,11,19,0.78); backdrop-filter:blur(14px);
@@ -77,7 +103,7 @@ nav{
   display:flex; align-items:center; gap:8px; color:var(--text); text-decoration:none;
 }
 .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--signal); box-shadow:0 0 8px var(--signal); animation:pulse-dot 2.4s ease-in-out infinite}
-.nav-links{display:flex; gap:34px; list-style:none}
+.nav-links{display:flex; gap:30px; list-style:none}
 .nav-links a{
   text-decoration:none; color:var(--muted); font-size:0.92rem; font-weight:500;
   position:relative; transition:color 0.25s;
@@ -99,20 +125,27 @@ nav{
 .hero-inner{
   display:grid; grid-template-columns:1.05fr 0.95fr; gap:40px; align-items:center; width:100%;
 }
-.hero-copy .eyebrow{margin-bottom:20px}
+.hero-copy .eyebrow{margin-bottom:20px; opacity:0; animation:fadeUp 0.7s ease 0.1s forwards}
 .hero h1{
   font-size:clamp(2.6rem,5vw,4.2rem); line-height:1.04; margin-bottom:20px;
+  opacity:0; animation:fadeUp 0.8s ease 0.25s forwards;
 }
 .hero h1 .accent{color:var(--copper-bright)}
 .role-line{
   font-family:'JetBrains Mono',monospace; font-size:1.05rem; color:var(--signal);
   min-height:1.6em; margin-bottom:26px; display:flex; align-items:center;
+  opacity:0; animation:fadeUp 0.8s ease 0.4s forwards;
 }
 .role-line .cursor{display:inline-block; width:2px; height:1.1em; background:var(--signal); margin-left:2px; animation:blink 1s step-end infinite}
 @keyframes blink{50%{opacity:0}}
-.hero-desc{color:var(--muted); font-size:1.05rem; max-width:520px; margin-bottom:34px}
+@keyframes fadeUp{from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:translateY(0)}}
+.hero-desc{
+  color:var(--muted); font-size:1.05rem; max-width:540px; margin-bottom:34px;
+  opacity:0; animation:fadeUp 0.8s ease 0.55s forwards;
+}
+.hero-desc strong{color:var(--text); font-weight:600}
 
-.cta-row{display:flex; gap:14px; flex-wrap:wrap}
+.cta-row{display:flex; gap:14px; flex-wrap:wrap; opacity:0; animation:fadeUp 0.8s ease 0.7s forwards}
 .btn{
   display:inline-flex; align-items:center; gap:8px; padding:13px 26px;
   border-radius:30px; text-decoration:none; font-weight:500; font-size:0.95rem;
@@ -124,19 +157,21 @@ nav{
 .btn-ghost{border-color:var(--border-line); color:var(--text)}
 .btn-ghost:hover{border-color:var(--signal); color:var(--signal); transform:translateY(-2px)}
 
-.hero-visual{position:relative; display:flex; justify-content:center; align-items:center}
+.hero-visual{position:relative; display:flex; justify-content:center; align-items:center; opacity:0; animation:fadeIn 1s ease 0.3s forwards}
+@keyframes fadeIn{from{opacity:0} to{opacity:1}}
 .hero-glow{
-  position:absolute; width:340px; height:340px; border-radius:50%;
+  position:absolute; width:360px; height:360px; border-radius:50%;
   background:radial-gradient(circle, rgba(92,232,212,0.22), transparent 70%);
   filter:blur(10px); animation:float 7s ease-in-out infinite;
 }
 @keyframes float{0%,100%{transform:translateY(0px)}50%{transform:translateY(-14px)}}
-.portrait-wrap{position:relative; z-index:2; width:340px}
+.portrait-wrap{position:relative; z-index:2; width:320px; animation:float 7s ease-in-out infinite; animation-delay:-2s}
 .portrait-wrap img{width:100%; display:block; filter:drop-shadow(0 22px 40px rgba(0,0,0,0.55))}
-.trace-ring{position:absolute; inset:-30px; z-index:1}
+.trace-ring{position:absolute; inset:-40px; z-index:1}
 .trace-ring circle{fill:none; stroke:var(--copper); stroke-width:1; stroke-dasharray:4 10; opacity:0.55; animation:spin 40s linear infinite}
+.trace-ring circle.r2{stroke:var(--signal-dim); stroke-dasharray:2 6; animation-duration:60s; animation-direction:reverse}
 @keyframes spin{to{transform:rotate(360deg)}}
-.node{position:absolute; width:9px; height:9px; border-radius:50%; background:var(--signal); box-shadow:0 0 10px var(--signal)}
+.node{position:absolute; width:9px; height:9px; border-radius:50%; background:var(--signal); box-shadow:0 0 10px var(--signal); animation:pulse-dot 2.4s ease-in-out infinite}
 
 .scroll-cue{
   position:absolute; bottom:26px; left:50%; transform:translateX(-50%);
@@ -146,14 +181,28 @@ nav{
 .scroll-cue .line{width:1px; height:34px; background:linear-gradient(var(--signal), transparent); animation:scrolldown 1.8s ease-in-out infinite}
 @keyframes scrolldown{0%{transform:scaleY(0); transform-origin:top}50%{transform:scaleY(1); transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0); transform-origin:bottom}}
 
-/* reveal on scroll */
 .reveal{opacity:0; transform:translateY(28px); transition:opacity 0.7s ease, transform 0.7s ease}
 .reveal.in{opacity:1; transform:translateY(0)}
 
-/* section headers */
 .section-head{margin-bottom:52px; max-width:640px}
 .section-head h2{font-size:clamp(1.8rem,3vw,2.4rem)}
 .section-head p{color:var(--muted); margin-top:12px; font-size:1.02rem}
+
+/* focus areas — signature grid */
+.focus-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:20px}
+.focus-card{
+  background:var(--surface); border:1px solid var(--border-line); border-radius:var(--radius);
+  padding:28px 24px; position:relative; overflow:hidden; transition:transform 0.35s ease, border-color 0.35s ease;
+}
+.focus-card::before{
+  content:''; position:absolute; inset:0; opacity:0; transition:opacity 0.35s ease;
+  background:radial-gradient(circle at 30% 0%, rgba(92,232,212,0.12), transparent 60%);
+}
+.focus-card:hover{transform:translateY(-6px); border-color:var(--signal)}
+.focus-card:hover::before{opacity:1}
+.focus-icon{width:44px; height:44px; margin-bottom:18px}
+.focus-card h3{font-size:1.08rem; margin-bottom:10px}
+.focus-card p{color:var(--muted); font-size:0.9rem}
 
 /* about */
 .about-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:50px; align-items:start}
@@ -166,7 +215,7 @@ nav{
 .stat .num{font-family:'Space Grotesk',sans-serif; font-size:2.1rem; font-weight:700; color:var(--copper-bright)}
 .stat .label{font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-top:4px}
 
-/* skills - component tray */
+/* skills */
 .tray-group{margin-bottom:30px}
 .tray-title{font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px}
 .chip-row{display:flex; flex-wrap:wrap; gap:10px}
@@ -175,6 +224,31 @@ nav{
   border-radius:8px; font-size:0.9rem; color:var(--text); transition:all 0.25s ease; cursor:default;
 }
 .chip:hover{border-color:var(--signal); color:var(--signal); transform:translateY(-3px)}
+
+/* video reel */
+.reel-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px}
+.reel-card{
+  background:var(--surface); border:1px solid var(--border-line); border-radius:var(--radius);
+  overflow:hidden; transition:transform 0.3s ease, border-color 0.3s ease;
+}
+.reel-card:hover{transform:translateY(-5px); border-color:var(--copper)}
+.reel-frame{position:relative; aspect-ratio:16/9; background:#0A0E17; overflow:hidden}
+.reel-frame video{width:100%; height:100%; object-fit:cover; display:block}
+.reel-play{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  background:rgba(8,11,19,0.15); cursor:pointer; transition:background 0.25s ease;
+}
+.reel-play:hover{background:rgba(8,11,19,0.35)}
+.reel-play svg{width:56px; height:56px; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5))}
+.reel-play.hidden{display:none}
+.reel-meta{padding:18px 20px}
+.reel-meta .card-tag{display:block; margin-bottom:6px}
+.reel-meta h3{font-size:1rem; margin-bottom:6px}
+.reel-meta p{color:var(--muted); font-size:0.86rem}
+.reel-note{
+  margin-top:22px; font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--muted-dim);
+  border-left:2px solid var(--border-line); padding-left:14px;
+}
 
 /* projects */
 .projects-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:24px}
@@ -195,7 +269,6 @@ nav{
 .card-links a{font-size:0.88rem; font-weight:500; color:var(--copper-bright); text-decoration:none; display:flex; align-items:center; gap:5px}
 .card-links a:hover{color:var(--signal)}
 
-/* sparkline */
 .spark{width:100%; height:110px}
 .spark path{fill:none; stroke:var(--signal); stroke-width:2}
 .spark .fill{stroke:none; fill:url(#sparkfill)}
@@ -218,7 +291,8 @@ nav{
 
 /* beyond */
 .beyond-row{display:grid; grid-template-columns:repeat(3,1fr); gap:22px}
-.beyond-card{background:var(--surface); border:1px solid var(--border-line); border-radius:var(--radius); padding:26px}
+.beyond-card{background:var(--surface); border:1px solid var(--border-line); border-radius:var(--radius); padding:26px; transition:transform 0.3s ease, border-color 0.3s ease}
+.beyond-card:hover{transform:translateY(-5px); border-color:var(--signal)}
 .beyond-card h3{font-size:1.05rem; margin-bottom:8px}
 .beyond-card p{color:var(--muted); font-size:0.92rem}
 
@@ -232,6 +306,10 @@ footer{
   font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--muted-dim);
 }
 
+@media(max-width:1000px){
+  .focus-grid{grid-template-columns:repeat(2,1fr)}
+  .reel-grid{grid-template-columns:1fr}
+}
 @media(max-width:860px){
   .hero-inner{grid-template-columns:1fr; text-align:center}
   .hero-desc{margin-left:auto; margin-right:auto}
@@ -241,6 +319,7 @@ footer{
   .projects-grid{grid-template-columns:1fr}
   .card.featured{grid-template-columns:1fr}
   .beyond-row{grid-template-columns:1fr}
+  .focus-grid{grid-template-columns:1fr}
   .nav-links{position:fixed; top:68px; left:0; right:0; background:var(--bg-panel); flex-direction:column; padding:20px 6%; gap:18px; border-bottom:1px solid var(--border-line); display:none}
   .nav-links.open{display:flex}
   .nav-toggle{display:block; background:none; border:none; color:var(--text); font-size:1.4rem; cursor:pointer}
@@ -254,13 +333,25 @@ footer{
 <body>
 
 <div class="bg-grid"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<div class="power-rail" id="powerRail" aria-hidden="true">
+  <div class="rail-node active" data-target="top"></div>
+  <div class="rail-line"><div class="rail-fill" id="railFill"></div></div>
+  <div class="rail-node" data-target="focus"></div>
+  <div class="rail-node" data-target="projects"></div>
+  <div class="rail-node" data-target="experience"></div>
+  <div class="rail-node" data-target="contact"></div>
+</div>
 
 <nav>
   <div class="nav-inner">
     <a class="logo" href="#top"><span class="dot"></span>ATHULYA.SIVADASAN</a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#about">About</a></li>
+      <li><a href="#focus">Focus</a></li>
       <li><a href="#skills">Skills</a></li>
+      <li><a href="#reel">Reel</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -275,7 +366,7 @@ footer{
       <div class="eyebrow">ECE · BATCH 2023–2027 · KERALA</div>
       <h1>Athulya <span class="accent">Sivadasan</span></h1>
       <div class="role-line"><span id="roleText">Embedded Systems Engineer</span><span class="cursor"></span></div>
-      <p class="hero-desc">Final-year Electronics & Communication Engineering student building explainable edge-AI systems — from vibration sensors to on-device LSTMs. Currently balancing GATE ECE prep with embedded/IoT placement prep.</p>
+      <p class="hero-desc">Final-year Electronics & Communication Engineering student building explainable edge-AI systems — from vibration sensors to on-device LSTMs. Drawn to the layer where <strong>Edge AI</strong>, <strong>Embedded Systems & IoT</strong>, <strong>VLSI</strong>, and <strong>Robotics</strong> meet.</p>
       <div class="cta-row">
         <a class="btn btn-primary" href="#projects">View Projects</a>
         <a class="btn btn-ghost" href="mailto:i.athulyasivadasan@gmail.com">Get in Touch</a>
@@ -283,13 +374,71 @@ footer{
     </div>
     <div class="hero-visual">
       <div class="hero-glow"></div>
-      <svg class="trace-ring" viewBox="0 0 400 400"><circle cx="200" cy="200" r="190"/></svg>
+      <svg class="trace-ring" viewBox="0 0 400 400"><circle cx="200" cy="200" r="190"/><circle class="r2" cx="200" cy="200" r="165"/></svg>
+      <div class="node" style="top:6%; left:12%"></div>
+      <div class="node" style="bottom:10%; right:8%; animation-delay:0.8s"></div>
       <div class="portrait-wrap">
-        <img src="athulya_portrait.png" alt="Athulya Sivadasan">
+        <img src="athulya_portrait_transparent.png" alt="Athulya Sivadasan">
       </div>
     </div>
   </div>
   <div class="scroll-cue"><span class="line"></span>SCROLL</div>
+</section>
+
+<section id="focus">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Focus Areas</div>
+      <h2>Where I spend my time</h2>
+      <p>Four fields I keep circling back to — each one a different layer of the same stack, from silicon to sensor to inference.</p>
+    </div>
+    <div class="focus-grid">
+
+      <div class="focus-card reveal">
+        <svg class="focus-icon" viewBox="0 0 48 48" fill="none">
+          <rect x="16" y="16" width="16" height="16" rx="2" stroke="#5CE8D4" stroke-width="2"/>
+          <circle cx="24" cy="24" r="3" fill="#5CE8D4"/>
+          <path d="M24 4v10M24 34v10M4 24h10M34 24h10M10 10l7 7M31 31l7 7M38 10l-7 7M17 31l-7 7" stroke="#5CE8D4" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <h3>Edge AI</h3>
+        <p>Running compact models — LSTMs, classifiers — directly on microcontrollers, so inference happens where the sensor is.</p>
+      </div>
+
+      <div class="focus-card reveal">
+        <svg class="focus-icon" viewBox="0 0 48 48" fill="none">
+          <rect x="10" y="10" width="28" height="28" rx="3" stroke="#E8AD73" stroke-width="2"/>
+          <path d="M17 10V4M24 10V4M31 10V4M17 44v-6M24 44v-6M31 44v-6M10 17H4M10 24H4M10 31H4M44 17h-6M44 24h-6M44 31h-6" stroke="#E8AD73" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="18" cy="18" r="1.8" fill="#E8AD73"/><circle cx="30" cy="18" r="1.8" fill="#E8AD73"/>
+          <circle cx="18" cy="30" r="1.8" fill="#E8AD73"/><circle cx="30" cy="30" r="1.8" fill="#E8AD73"/>
+        </svg>
+        <h3>Embedded Systems & IoT</h3>
+        <p>Sensor interfacing, firmware, and connected dashboards — ESP32 and Arduino builds that report on the physical world in real time.</p>
+      </div>
+
+      <div class="focus-card reveal">
+        <svg class="focus-icon" viewBox="0 0 48 48" fill="none">
+          <rect x="12" y="6" width="24" height="36" rx="2" stroke="#5CE8D4" stroke-width="2"/>
+          <path d="M18 6v-3M30 6v-3M18 45v-3M30 45v-3M12 15H9M12 24H9M12 33H9M36 15h3M36 24h3M36 33h3" stroke="#5CE8D4" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M18 16h12M18 22h12M18 28h12M18 34h8" stroke="#5CE8D4" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <h3>VLSI Design</h3>
+        <p>Designing and verifying digital logic in Verilog HDL — from gate-level building blocks up to full self-checking testbenches.</p>
+      </div>
+
+      <div class="focus-card reveal">
+        <svg class="focus-icon" viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="12" r="6" stroke="#E3B341" stroke-width="2"/>
+          <path d="M24 18v8M14 34c0-6 4-8 10-8s10 2 10 8" stroke="#E3B341" stroke-width="2" stroke-linecap="round"/>
+          <rect x="12" y="34" width="8" height="8" rx="1.5" stroke="#E3B341" stroke-width="1.8"/>
+          <rect x="28" y="34" width="8" height="8" rx="1.5" stroke="#E3B341" stroke-width="1.8"/>
+          <circle cx="21" cy="11" r="1.4" fill="#E3B341"/><circle cx="27" cy="11" r="1.4" fill="#E3B341"/>
+        </svg>
+        <h3>Robotics</h3>
+        <p>Exploring actuation and control — pairing sensing and embedded intelligence with systems that move and respond.</p>
+      </div>
+
+    </div>
+  </div>
 </section>
 
 <section id="about">
@@ -301,10 +450,10 @@ footer{
       <p>I've built systems spanning predictive maintenance, digital-twin health monitoring, and VLSI design, and I actively document each build end-to-end: from schematic to deployed dashboard. Outside the lab, I compete in public speaking and shoot portrait, reel, and wildlife photography across Kerala.</p>
     </div>
     <div class="stat-panel reveal">
-      <div class="stat"><div class="num">7.15</div><div class="label">CGPA / Sem 5</div></div>
-      <div class="stat"><div class="num">5+</div><div class="label">Systems Built</div></div>
-      <div class="stat"><div class="num">2</div><div class="label">Internships</div></div>
-      <div class="stat"><div class="num">17/17</div><div class="label">ALU Testbench Pass</div></div>
+      <div class="stat"><div class="num" data-count="7.15">0</div><div class="label">CGPA / Sem 5</div></div>
+      <div class="stat"><div class="num" data-count="5">0</div><div class="label">Systems Built</div></div>
+      <div class="stat"><div class="num" data-count="2">0</div><div class="label">Internships</div></div>
+      <div class="stat"><div class="num" data-count="4">0</div><div class="label">Core Focus Areas</div></div>
     </div>
   </div>
 </section>
@@ -318,10 +467,10 @@ footer{
     </div>
 
     <div class="tray-group reveal">
-      <div class="tray-title">Embedded & Hardware</div>
+      <div class="tray-title">Embedded, IoT & Robotics</div>
       <div class="chip-row">
         <span class="chip">ESP32</span><span class="chip">Arduino</span><span class="chip">Sensor Interfacing</span>
-        <span class="chip">Circuit Design</span><span class="chip">Verilog HDL</span><span class="chip">Xilinx Vivado</span>
+        <span class="chip">Circuit Design</span><span class="chip">Actuators & Control</span><span class="chip">Robotics Prototyping</span>
       </div>
     </div>
     <div class="tray-group reveal">
@@ -332,18 +481,81 @@ footer{
       </div>
     </div>
     <div class="tray-group reveal">
+      <div class="tray-title">VLSI</div>
+      <div class="chip-row">
+        <span class="chip">Verilog HDL</span><span class="chip">Xilinx Vivado</span><span class="chip">Testbench Design</span>
+      </div>
+    </div>
+    <div class="tray-group reveal">
       <div class="tray-title">Tools & Platforms</div>
       <div class="chip-row">
         <span class="chip">Arduino IDE</span><span class="chip">Tinkercad</span><span class="chip">Wokwi</span>
         <span class="chip">GitHub</span><span class="chip">ThingSpeak</span><span class="chip">Cloudflare Workers</span>
       </div>
     </div>
-    <div class="tray-group reveal">
-      <div class="tray-title">Beyond the Bench</div>
-      <div class="chip-row">
-        <span class="chip">Technical Presentations</span><span class="chip">Public Speaking</span><span class="chip">Leadership</span>
-      </div>
+  </div>
+</section>
+
+<section id="reel">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Build Reel</div>
+      <h2>See it running</h2>
+      <p>Short clips from the bench — hardware in motion, dashboards live, boards under test.</p>
     </div>
+
+    <div class="reel-grid">
+
+      <div class="reel-card reveal">
+        <div class="reel-frame">
+          <video muted loop playsinline preload="none" poster="media/predicta-poster.jpg">
+            <source src="media/predicta-demo.mp4" type="video/mp4">
+          </video>
+          <button class="reel-play" aria-label="Play video">
+            <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="27" fill="rgba(8,11,19,0.55)" stroke="#5CE8D4" stroke-width="2"/><polygon points="23,17 23,39 40,28" fill="#5CE8D4"/></svg>
+          </button>
+        </div>
+        <div class="reel-meta">
+          <span class="card-tag">Edge AI · Embedded</span>
+          <h3>Predicta — Live on the Bench</h3>
+          <p>Vibration, temperature, and current fused on an ESP32, classified in real time by an on-device LSTM.</p>
+        </div>
+      </div>
+
+      <div class="reel-card reveal">
+        <div class="reel-frame">
+          <video muted loop playsinline preload="none" poster="media/vlsi-poster.jpg">
+            <source src="media/vlsi-waveform-walkthrough.mp4" type="video/mp4">
+          </video>
+          <button class="reel-play" aria-label="Play video">
+            <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="27" fill="rgba(8,11,19,0.55)" stroke="#E8AD73" stroke-width="2"/><polygon points="23,17 23,39 40,28" fill="#E8AD73"/></svg>
+          </button>
+        </div>
+        <div class="reel-meta">
+          <span class="card-tag">VLSI · Vivado</span>
+          <h3>32-bit ALU — Waveform Walkthrough</h3>
+          <p>A guided look at the simulation output and testbench behaviour behind the ALU design.</p>
+        </div>
+      </div>
+
+      <div class="reel-card reveal">
+        <div class="reel-frame">
+          <video muted loop playsinline preload="none" poster="media/robotics-poster.jpg">
+            <source src="media/robotics-bench-test.mp4" type="video/mp4">
+          </video>
+          <button class="reel-play" aria-label="Play video">
+            <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="27" fill="rgba(8,11,19,0.55)" stroke="#E3B341" stroke-width="2"/><polygon points="23,17 23,39 40,28" fill="#E3B341"/></svg>
+          </button>
+        </div>
+        <div class="reel-meta">
+          <span class="card-tag">Robotics · IoT</span>
+          <h3>Sensing & Actuation Bench Test</h3>
+          <p>An early look at pairing sensor input with actuated response — the robotics side of the toolkit.</p>
+        </div>
+      </div>
+
+    </div>
+    <p class="reel-note">△ Drop your own .mp4 files into /media (matching the filenames above) to bring these to life — the players, posters, and play controls are already wired up.</p>
   </div>
 </section>
 
@@ -416,7 +628,7 @@ footer{
       <div class="card reveal">
         <div class="card-top"><span class="led" style="background:var(--copper-bright); box-shadow:0 0 8px var(--copper-bright)"></span><span class="card-tag">VLSI · Vaidsys Technologies</span></div>
         <h3>32-bit ALU</h3>
-        <p>A 32-bit Arithmetic Logic Unit designed in Verilog HDL on Xilinx Vivado, verified with a self-checking testbench — 17/17 test cases passed, 9/10 external review score.</p>
+        <p>A 32-bit Arithmetic Logic Unit designed in Verilog HDL on Xilinx Vivado, verified end-to-end with a self-checking testbench and reviewed externally.</p>
         <div class="tag-row"><span class="tag">Verilog HDL</span><span class="tag">Xilinx Vivado</span></div>
       </div>
 
@@ -439,7 +651,7 @@ footer{
       <div class="tl-item reveal">
         <div class="tl-date">VLSI DESIGN</div>
         <h3>VLSI Design Intern — Vaidsys Technologies</h3>
-        <p>Designed and verified a 32-bit ALU in Verilog HDL using Xilinx Vivado, building a self-checking testbench that achieved a full 17/17 pass rate and scored 9/10 in external review.</p>
+        <p>Designed and verified a 32-bit ALU in Verilog HDL using Xilinx Vivado, building a self-checking testbench and presenting the work for external review.</p>
       </div>
     </div>
   </div>
@@ -461,8 +673,8 @@ footer{
         <p>Shoots portraits, reels, and nature & wildlife photography and videography across Kerala.</p>
       </div>
       <div class="beyond-card reveal">
-        <h3>GATE ECE Prep</h3>
-        <p>Preparing alongside placement search — building core fundamentals through NPTEL and structured problem practice.</p>
+        <h3>Robotics Tinkering</h3>
+        <p>Independent exploration of sensing and actuation outside coursework — the earliest stage of the robotics side of the toolkit.</p>
       </div>
     </div>
   </div>
@@ -496,15 +708,15 @@ navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
 navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
 
 // role text cycling
-const roles = ['Embedded Systems Engineer','IoT Developer','Edge AI Enthusiast','GATE ECE Aspirant'];
+const roles = ['Embedded Systems Engineer','IoT Developer','Edge AI Enthusiast','VLSI Design Intern','Robotics Explorer'];
 let roleIdx = 0;
 const roleEl = document.getElementById('roleText');
+roleEl.style.transition = 'opacity 0.3s ease';
 setInterval(() => {
   roleIdx = (roleIdx + 1) % roles.length;
   roleEl.style.opacity = 0;
   setTimeout(() => { roleEl.textContent = roles[roleIdx]; roleEl.style.opacity = 1; }, 300);
 }, 3200);
-roleEl.style.transition = 'opacity 0.3s ease';
 
 // scroll reveal
 const revealEls = document.querySelectorAll('.reveal');
@@ -512,6 +724,79 @@ const io = new IntersectionObserver((entries) => {
   entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
 }, { threshold: 0.15 });
 revealEls.forEach(el => io.observe(el));
+
+// cursor-follow ambient glow (desktop only)
+const glow = document.getElementById('cursorGlow');
+if(window.matchMedia('(pointer:fine)').matches){
+  window.addEventListener('mousemove', (e) => {
+    glow.style.opacity = '1';
+    glow.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%,-50%)`;
+  });
+  window.addEventListener('mouseleave', () => glow.style.opacity = '0');
+}
+
+// power rail: scroll progress + active node
+const railFill = document.getElementById('railFill');
+const railNodes = document.querySelectorAll('.rail-node');
+const railTargets = { top: '#top', focus: '#focus', projects: '#projects', experience: '#experience', contact: '#contact' };
+railNodes.forEach(n => {
+  n.addEventListener('click', () => {
+    const sel = railTargets[n.dataset.target];
+    if(sel) document.querySelector(sel)?.scrollIntoView({behavior:'smooth'});
+  });
+  n.style.cursor = 'pointer';
+});
+function updateRail(){
+  const doc = document.documentElement;
+  const pct = (doc.scrollTop) / (doc.scrollHeight - doc.clientHeight) * 100;
+  railFill.style.height = Math.min(100, Math.max(0, pct)) + '%';
+  const sections = ['top','focus','projects','experience','contact'].map(id => document.getElementById(id));
+  let activeIdx = 0;
+  sections.forEach((s,i) => { if(s && s.getBoundingClientRect().top < window.innerHeight * 0.5) activeIdx = i; });
+  railNodes.forEach((n,i) => n.classList.toggle('active', i <= activeIdx));
+}
+document.addEventListener('scroll', updateRail, { passive:true });
+updateRail();
+
+// animated stat counters
+const statEls = document.querySelectorAll('.stat .num');
+const statIO = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(!entry.isIntersecting) return;
+    const el = entry.target;
+    const target = parseFloat(el.dataset.count);
+    const isDecimal = String(target).includes('.');
+    const duration = 1200;
+    const start = performance.now();
+    function tick(now){
+      const p = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = target * eased;
+      el.textContent = isDecimal ? val.toFixed(2) : Math.round(val);
+      if(p < 1) requestAnimationFrame(tick);
+      else el.textContent = isDecimal ? target.toFixed(2) : target;
+    }
+    requestAnimationFrame(tick);
+    statIO.unobserve(el);
+  });
+}, { threshold:0.5 });
+statEls.forEach(el => statIO.observe(el));
+
+// video reel: click-to-play with graceful fallback if no source file present
+document.querySelectorAll('.reel-card').forEach(card => {
+  const video = card.querySelector('video');
+  const playBtn = card.querySelector('.reel-play');
+  playBtn.addEventListener('click', () => {
+    video.play().then(() => {
+      playBtn.classList.add('hidden');
+    }).catch(() => {
+      // no video file at that path yet — keep poster + play control visible
+      playBtn.classList.remove('hidden');
+    });
+  });
+  video.addEventListener('pause', () => playBtn.classList.remove('hidden'));
+  video.addEventListener('ended', () => playBtn.classList.remove('hidden'));
+});
 
 // sparkline draw-in for Predicta card
 function buildSpark(){
