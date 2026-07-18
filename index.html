@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 :root{
   --bg:#F8FAFC;
@@ -49,45 +50,10 @@ body{
   mask-image:radial-gradient(ellipse 100% 60% at 50% 0%, black 0%, transparent 80%);
 }
 
-/* ---- ambient animated background: floating gradient blobs ---- */
-.bg-blobs{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
-.blob{
-  position:absolute; border-radius:50%; filter:blur(70px); opacity:0.35;
-  will-change:transform;
-}
-.blob-1{
-  width:640px; height:640px; top:-220px; left:-160px;
-  background:radial-gradient(circle at 30% 30%, var(--signal-bright), transparent 70%);
-  animation:blobDrift1 26s ease-in-out infinite;
-}
-.blob-2{
-  width:560px; height:560px; top:30%; right:-200px;
-  background:radial-gradient(circle at 60% 40%, var(--copper-bright), transparent 70%);
-  animation:blobDrift2 32s ease-in-out infinite;
-}
-.blob-3{
-  width:520px; height:520px; bottom:-180px; left:20%;
-  background:radial-gradient(circle at 50% 50%, var(--amber), transparent 72%);
-  opacity:0.22;
-  animation:blobDrift3 38s ease-in-out infinite;
-}
-@keyframes blobDrift1{
-  0%,100%{ transform:translate(0,0) scale(1); }
-  33%{ transform:translate(90px,60px) scale(1.12); }
-  66%{ transform:translate(-40px,120px) scale(0.94); }
-}
-@keyframes blobDrift2{
-  0%,100%{ transform:translate(0,0) scale(1); }
-  40%{ transform:translate(-110px,80px) scale(1.08); }
-  70%{ transform:translate(-50px,-70px) scale(0.95); }
-}
-@keyframes blobDrift3{
-  0%,100%{ transform:translate(0,0) scale(1); }
-  50%{ transform:translate(80px,-90px) scale(1.15); }
-}
-#circuitCanvas{ position:fixed; inset:0; z-index:0; pointer-events:none; width:100%; height:100%; opacity:0.55; }
+/* ---- ambient animated 3D background: circuits, sensors, microcontrollers, walking robot ---- */
+#bgScene3D{ position:fixed; inset:0; z-index:0; pointer-events:none; width:100%; height:100%; }
 @media(prefers-reduced-motion:reduce){
-  .blob{ animation:none !important; }
+  #bgScene3D{ opacity:0.5; }
 }
 
 .cursor-glow{
@@ -393,12 +359,7 @@ footer{
 <body>
 
 <div class="bg-grid"></div>
-<div class="bg-blobs" aria-hidden="true">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-</div>
-<canvas id="circuitCanvas" aria-hidden="true"></canvas>
+<canvas id="bgScene3D" aria-hidden="true"></canvas>
 <div class="cursor-glow" id="cursorGlow"></div>
 
 <div class="power-rail" id="powerRail" aria-hidden="true">
@@ -753,130 +714,202 @@ footer{
 </div>
 
 <script>
-// ===== Ambient animated circuit-trace background (canvas) =====
+// ===== Ambient animated 3D background: circuit board, sensor, chip, walking robot =====
 (function(){
-  const canvas = document.getElementById('circuitCanvas');
-  const ctx = canvas.getContext('2d');
+  if(typeof THREE === 'undefined') return;
+  const canvas = document.getElementById('bgScene3D');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let W, H, DPR;
-  let paths = [];
-  let pulses = [];
 
-  const rootStyles = getComputedStyle(document.documentElement);
-  const colorSignal = rootStyles.getPropertyValue('--signal-bright').trim() || '#06B6D4';
-  const colorCopper = rootStyles.getPropertyValue('--copper-bright').trim() || '#3B82F6';
-  const colorLine = 'rgba(15,23,42,0.07)';
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  camera.position.set(0, 1.4, 16);
+
+  const signalColor = 0x06B6D4;
+  const copperColor = 0x3B82F6;
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+  const dLight = new THREE.DirectionalLight(0xffffff, 0.5);
+  dLight.position.set(4, 8, 6);
+  scene.add(dLight);
 
   function resize(){
-    DPR = Math.min(window.devicePixelRatio || 1, 2);
-    W = window.innerWidth;
-    H = document.documentElement.scrollHeight;
-    canvas.width = W * DPR;
-    canvas.height = H * DPR;
-    canvas.style.height = H + 'px';
-    ctx.setTransform(DPR,0,0,DPR,0,0);
-    buildPaths();
+    const w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
   }
 
-  // Build a set of right-angle "PCB trace" paths across the page
-  function buildPaths(){
-    paths = [];
-    const cols = Math.max(4, Math.floor(W / 260));
-    const rowH = 340;
-    const rows = Math.max(2, Math.ceil(H / rowH));
-    for(let r = 0; r < rows; r++){
-      for(let c = 0; c < cols; c++){
-        if(Math.random() > 0.55) continue;
-        const x0 = (c / cols) * W + Math.random()*60;
-        const y0 = r * rowH + Math.random()*80;
-        const midX = x0 + (60 + Math.random()*120) * (Math.random() > 0.5 ? 1 : -1);
-        const midY = y0 + 70 + Math.random()*90;
-        const x1 = midX + (40 + Math.random()*100);
-        const y1 = midY + 60 + Math.random()*100;
-        paths.push({
-          pts:[ {x:x0,y:y0}, {x:midX,y:y0}, {x:midX,y:midY}, {x:x1,y:midY}, {x:x1,y:y1} ],
-          color: Math.random() > 0.5 ? colorSignal : colorCopper
-        });
+  // ---------- Floating circuit-board grid (large, tilted, in the back) ----------
+  const circuitGroup = new THREE.Group();
+  {
+    const gridMat = new THREE.LineBasicMaterial({ color: signalColor, transparent:true, opacity:0.28 });
+    const gridMat2 = new THREE.LineBasicMaterial({ color: copperColor, transparent:true, opacity:0.22 });
+    for(let i = 0; i < 10; i++){
+      const pts = [];
+      let x = -9 + Math.random()*18, y = -5 + Math.random()*10;
+      pts.push(new THREE.Vector3(x, y, 0));
+      const segs = 2 + Math.floor(Math.random()*2);
+      for(let s = 0; s < segs; s++){
+        if(Math.random() > 0.5) x += (Math.random()>0.5?1:-1) * (1 + Math.random()*2);
+        else y += (Math.random()>0.5?1:-1) * (1 + Math.random()*2);
+        pts.push(new THREE.Vector3(x, y, 0));
+      }
+      const geo = new THREE.BufferGeometry().setFromPoints(pts);
+      const line = new THREE.Line(geo, i % 2 === 0 ? gridMat : gridMat2);
+      circuitGroup.add(line);
+      const node = new THREE.Mesh(
+        new THREE.SphereGeometry(0.06, 8, 8),
+        new THREE.MeshBasicMaterial({ color: i % 2 === 0 ? signalColor : copperColor, transparent:true, opacity:0.5 })
+      );
+      node.position.copy(pts[pts.length-1]);
+      circuitGroup.add(node);
+    }
+    circuitGroup.position.set(0, 0, -6);
+    circuitGroup.rotation.x = -0.15;
+    scene.add(circuitGroup);
+  }
+
+  // ---------- Microcontroller chip (top-left, big) ----------
+  const chipGroup = new THREE.Group();
+  {
+    const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness:0.5, metalness:0.3 });
+    const body = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.35, 2.6), bodyMat);
+    chipGroup.add(body);
+    const notchMat = new THREE.MeshStandardMaterial({ color: signalColor, emissive: signalColor, emissiveIntensity:0.6 });
+    const notch = new THREE.Mesh(new THREE.CircleGeometry(0.16, 16), notchMat);
+    notch.rotation.x = -Math.PI/2;
+    notch.position.set(-1.05, 0.19, -1.05);
+    chipGroup.add(notch);
+    const pinMat = new THREE.MeshStandardMaterial({ color: 0xB8C2CC, metalness:0.6, roughness:0.4 });
+    const pinCount = 7;
+    for(let side = 0; side < 4; side++){
+      for(let i = 0; i < pinCount; i++){
+        const pin = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.08, 0.3), pinMat);
+        const t = (i / (pinCount-1) - 0.5) * 2.2;
+        if(side === 0){ pin.position.set(t, 0, 1.45); }
+        else if(side === 1){ pin.position.set(t, 0, -1.45); }
+        else if(side === 2){ pin.position.set(1.45, 0, t); pin.rotation.y = Math.PI/2; }
+        else { pin.position.set(-1.45, 0, t); pin.rotation.y = Math.PI/2; }
+        chipGroup.add(pin);
       }
     }
-    // precompute segment lengths for pulse travel
-    paths.forEach(p => {
-      let total = 0;
-      p.segLens = [];
-      for(let i=0;i<p.pts.length-1;i++){
-        const dx = p.pts[i+1].x - p.pts[i].x, dy = p.pts[i+1].y - p.pts[i].y;
-        const len = Math.hypot(dx,dy);
-        p.segLens.push(len);
-        total += len;
-      }
-      p.totalLen = total;
-    });
-    // seed a pulse per path (staggered)
-    pulses = paths.map((p,i) => ({
-      pathIndex:i,
-      dist: Math.random() * p.totalLen,
-      speed: 40 + Math.random()*50
-    }));
+    chipGroup.scale.set(1.15,1.15,1.15);
+    chipGroup.position.set(-6.5, 4.2, -2);
+    chipGroup.rotation.set(0.5, 0.4, 0.1);
+    scene.add(chipGroup);
   }
 
-  function pointAtDistance(path, dist){
-    let d = ((dist % path.totalLen) + path.totalLen) % path.totalLen;
-    for(let i=0;i<path.segLens.length;i++){
-      if(d <= path.segLens[i]){
-        const t = path.segLens[i] === 0 ? 0 : d / path.segLens[i];
-        const a = path.pts[i], b = path.pts[i+1];
-        return { x:a.x + (b.x-a.x)*t, y:a.y + (b.y-a.y)*t };
-      }
-      d -= path.segLens[i];
+  // ---------- Sensor module (top-right, big, pulsing scan ring) ----------
+  const sensorGroup = new THREE.Group();
+  let sensorRing;
+  {
+    const baseMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness:0.55 });
+    const base = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.85, 0.35, 24), baseMat);
+    sensorGroup.add(base);
+    const domeMat = new THREE.MeshStandardMaterial({ color: copperColor, emissive: copperColor, emissiveIntensity:0.35, roughness:0.3 });
+    const dome = new THREE.Mesh(new THREE.SphereGeometry(0.5, 24, 24, 0, Math.PI*2, 0, Math.PI/2), domeMat);
+    dome.position.y = 0.17;
+    sensorGroup.add(dome);
+    sensorRing = new THREE.Mesh(
+      new THREE.TorusGeometry(0.95, 0.03, 8, 40),
+      new THREE.MeshBasicMaterial({ color: copperColor, transparent:true, opacity:0.55 })
+    );
+    sensorRing.rotation.x = Math.PI/2;
+    sensorGroup.add(sensorRing);
+    sensorGroup.scale.set(1.4,1.4,1.4);
+    sensorGroup.position.set(6.8, 4, -1.5);
+    sensorGroup.rotation.set(0.3, -0.3, 0);
+    scene.add(sensorGroup);
+  }
+
+  // ---------- Walking robot (bottom, walks left-right across the scene) ----------
+  const robot = new THREE.Group();
+  let legL, legR, armL, armR, head;
+  {
+    const bodyMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness:0.45, metalness:0.2 });
+    const accentMat = new THREE.MeshStandardMaterial({ color: signalColor, emissive: signalColor, emissiveIntensity:0.5 });
+
+    const torso = new THREE.Mesh(new THREE.BoxGeometry(0.9, 1.1, 0.55), bodyMat);
+    torso.position.y = 1.3;
+    robot.add(torso);
+
+    const chestLight = new THREE.Mesh(new THREE.CircleGeometry(0.12,16), accentMat);
+    chestLight.position.set(0, 1.3, 0.28);
+    robot.add(chestLight);
+
+    head = new THREE.Group();
+    const headBox = new THREE.Mesh(new THREE.BoxGeometry(0.55,0.5,0.5), bodyMat);
+    head.add(headBox);
+    const eyeMat = new THREE.MeshStandardMaterial({ color: signalColor, emissive: signalColor, emissiveIntensity:0.9 });
+    const eyeL = new THREE.Mesh(new THREE.SphereGeometry(0.06,8,8), eyeMat);
+    eyeL.position.set(-0.15, 0, 0.26); head.add(eyeL);
+    const eyeR = eyeL.clone(); eyeR.position.x = 0.15; head.add(eyeR);
+    head.position.y = 2.15;
+    robot.add(head);
+
+    function makeLimb(){
+      const pivot = new THREE.Group();
+      const limb = new THREE.Mesh(new THREE.BoxGeometry(0.24,0.85,0.24), bodyMat);
+      limb.position.y = -0.42;
+      pivot.add(limb);
+      return pivot;
     }
-    return path.pts[path.pts.length-1];
-  }
+    legL = makeLimb(); legL.position.set(-0.24, 0.75, 0); robot.add(legL);
+    legR = makeLimb(); legR.position.set(0.24, 0.75, 0); robot.add(legR);
+    armL = makeLimb(); armL.position.set(-0.62, 1.75, 0); armL.scale.set(0.7,0.85,0.7); robot.add(armL);
+    armR = makeLimb(); armR.position.set(0.62, 1.75, 0); armR.scale.set(0.7,0.85,0.7); robot.add(armR);
 
-  function draw(dt){
-    ctx.clearRect(0,0,W,H);
-    // static traces
-    ctx.lineWidth = 1;
-    paths.forEach(p => {
-      ctx.strokeStyle = colorLine;
-      ctx.beginPath();
-      p.pts.forEach((pt,i) => i===0 ? ctx.moveTo(pt.x,pt.y) : ctx.lineTo(pt.x,pt.y));
-      ctx.stroke();
-      // junction dots
-      ctx.fillStyle = 'rgba(15,23,42,0.10)';
-      p.pts.forEach(pt => { ctx.beginPath(); ctx.arc(pt.x,pt.y,1.6,0,Math.PI*2); ctx.fill(); });
-    });
-    // traveling glowing pulses
-    pulses.forEach(pulse => {
-      const path = paths[pulse.pathIndex];
-      if(!path || path.totalLen === 0) return;
-      if(!reduceMotion) pulse.dist += pulse.speed * dt;
-      const pos = pointAtDistance(path, pulse.dist);
-      const grad = ctx.createRadialGradient(pos.x,pos.y,0,pos.x,pos.y,7);
-      grad.addColorStop(0, path.color);
-      grad.addColorStop(1, 'transparent');
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(pos.x,pos.y,7,0,Math.PI*2);
-      ctx.fill();
-      ctx.fillStyle = path.color;
-      ctx.beginPath();
-      ctx.arc(pos.x,pos.y,1.8,0,Math.PI*2);
-      ctx.fill();
-    });
-  }
-
-  let last = performance.now();
-  function loop(now){
-    const dt = Math.min(0.05, (now - last) / 1000);
-    last = now;
-    draw(dt);
-    requestAnimationFrame(loop);
+    robot.scale.set(1.5,1.5,1.5);
+    robot.position.set(-7, -3.6, 2.5);
+    scene.add(robot);
   }
 
   resize();
   window.addEventListener('resize', resize);
-  window.addEventListener('load', resize);
-  requestAnimationFrame(loop);
+
+  const clock = new THREE.Clock();
+  let robotDir = 1;
+
+  function animateFrame(){
+    const t = clock.getElapsedTime();
+
+    if(!reduceMotion){
+      circuitGroup.rotation.z = Math.sin(t*0.05) * 0.05;
+      circuitGroup.position.y = Math.sin(t*0.15) * 0.15;
+
+      chipGroup.rotation.y += 0.0025;
+      chipGroup.position.y = 4.2 + Math.sin(t*0.5) * 0.25;
+
+      sensorGroup.rotation.y += 0.004;
+      sensorRing.scale.setScalar(1 + Math.sin(t*1.6) * 0.12);
+      sensorGroup.position.y = 4 + Math.cos(t*0.45) * 0.2;
+
+      // walking cycle
+      const walkSpeed = 5.5;
+      const swing = Math.sin(t * walkSpeed);
+      legL.rotation.x = swing * 0.55;
+      legR.rotation.x = -swing * 0.55;
+      armL.rotation.x = -swing * 0.45;
+      armR.rotation.x = swing * 0.45;
+      head.rotation.y = Math.sin(t*0.8) * 0.25;
+
+      robot.position.x += robotDir * 0.012;
+      robot.rotation.y = robotDir > 0 ? Math.PI/2 : -Math.PI/2;
+      if(robot.position.x > 7){ robotDir = -1; }
+      if(robot.position.x < -7){ robotDir = 1; }
+      robot.position.y = -3.6 + Math.abs(Math.sin(t*walkSpeed)) * 0.08;
+
+      camera.position.x = Math.sin(t*0.06) * 0.6;
+      camera.lookAt(0, 0.5, 0);
+    }
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(animateFrame);
+  }
+  animateFrame();
 })();
 
 // ===== Big hero portrait: floating + cursor tilt + scroll parallax =====
@@ -890,7 +923,10 @@ footer{
   let scrollOffset = 0;
 
   // let the CSS entrance animation finish, then hand transform control to JS
-  setTimeout(() => { card.style.animation = 'none'; }, 1300);
+  setTimeout(() => {
+    card.style.animation = 'none';
+    card.style.opacity = '1';
+  }, 1300);
 
   window.addEventListener('mousemove', (e) => {
     const rect = card.getBoundingClientRect();
