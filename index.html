@@ -3,123 +3,537 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Athulya Sivadasan | Electronics and Communication Engineering Student</title>
+<title>Athulya Sivadasan | Embedded Systems & Edge AI Engineer</title>
+<meta name="description" content="Portfolio of Athulya Sivadasan — Electronics & Communication Engineering student specializing in Embedded Systems, IoT, and Edge AI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
---bg:#0B1120;--bg2:#111827;--card:#1F2937;
---accent:#D1D5DB;--accent2:#94A3B8;
---text:#F8FAFC;--muted:#CBD5E1;
+  --bg:#080B13;
+  --bg-panel:#0E1524;
+  --surface:#141D30;
+  --surface-hi:#1B2740;
+  --border:#24304a20;
+  --border-line:#22304A;
+  --copper:#C88A4F;
+  --copper-bright:#E8AD73;
+  --signal:#5CE8D4;
+  --signal-dim:#3A8F84;
+  --amber:#E3B341;
+  --text:#EDF2FA;
+  --muted:#8E9BB5;
+  --muted-dim:#5D6884;
+  --radius:14px;
+  --maxw:1180px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
-nav{position:sticky;top:0;background:var(--bg2);padding:15px 5%;display:flex;justify-content:space-between}
-nav a{color:var(--text);text-decoration:none;margin-left:15px}
-section{padding:70px 8%}
-.hero{text-align:center;padding:120px 8%}
-.hero h1{font-size:4rem}
-.hero em{color:var(--accent)}
-.btn{display:inline-block;padding:12px 22px;margin:8px;background:var(--accent);color:#000;text-decoration:none;border-radius:30px}
-.card{background:var(--card);padding:25px;border-radius:15px;margin-top:20px}
-.skills{display:flex;flex-wrap:wrap;gap:10px}
-.skill{background:var(--bg2);padding:10px 15px;border-radius:20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-footer{text-align:center;padding:30px;background:var(--bg2)}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.65;
+  overflow-x:hidden;
+  position:relative;
+}
+::selection{background:var(--copper);color:#0A0E17}
+
+/* ambient circuit background */
+.bg-grid{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(92,232,212,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(92,232,212,0.035) 1px, transparent 1px);
+  background-size:42px 42px;
+  mask-image:radial-gradient(ellipse 90% 60% at 50% 0%, black 0%, transparent 75%);
+}
+
+h1,h2,h3{font-family:'Space Grotesk',sans-serif; font-weight:600; letter-spacing:-0.01em}
+.mono{font-family:'JetBrains Mono',monospace}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace; font-size:0.78rem; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--signal); display:flex; align-items:center; gap:10px;
+  margin-bottom:14px;
+}
+.eyebrow::before{content:'';width:22px;height:1px;background:var(--signal);display:inline-block}
+
+a{color:inherit}
+.container{max-width:var(--maxw); margin:0 auto; padding:0 6%; position:relative; z-index:1}
+section{padding:110px 0}
+
+/* nav */
+nav{
+  position:sticky; top:0; z-index:50;
+  background:rgba(8,11,19,0.78); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border-line);
+}
+.nav-inner{
+  max-width:var(--maxw); margin:0 auto; padding:0 6%;
+  display:flex; justify-content:space-between; align-items:center; height:68px;
+}
+.logo{
+  font-family:'JetBrains Mono',monospace; font-weight:500; font-size:1rem;
+  display:flex; align-items:center; gap:8px; color:var(--text); text-decoration:none;
+}
+.logo .dot{width:8px;height:8px;border-radius:50%;background:var(--signal); box-shadow:0 0 8px var(--signal); animation:pulse-dot 2.4s ease-in-out infinite}
+.nav-links{display:flex; gap:34px; list-style:none}
+.nav-links a{
+  text-decoration:none; color:var(--muted); font-size:0.92rem; font-weight:500;
+  position:relative; transition:color 0.25s;
+}
+.nav-links a::after{
+  content:''; position:absolute; left:0; bottom:-6px; width:0; height:1px;
+  background:var(--copper-bright); transition:width 0.25s;
+}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::after{width:100%}
+.nav-toggle{display:none}
+
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:0.35}}
+
+/* hero */
+.hero{
+  padding:80px 0 60px; min-height:88vh; display:flex; align-items:center; position:relative;
+}
+.hero-inner{
+  display:grid; grid-template-columns:1.05fr 0.95fr; gap:40px; align-items:center; width:100%;
+}
+.hero-copy .eyebrow{margin-bottom:20px}
+.hero h1{
+  font-size:clamp(2.6rem,5vw,4.2rem); line-height:1.04; margin-bottom:20px;
+}
+.hero h1 .accent{color:var(--copper-bright)}
+.role-line{
+  font-family:'JetBrains Mono',monospace; font-size:1.05rem; color:var(--signal);
+  min-height:1.6em; margin-bottom:26px; display:flex; align-items:center;
+}
+.role-line .cursor{display:inline-block; width:2px; height:1.1em; background:var(--signal); margin-left:2px; animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.hero-desc{color:var(--muted); font-size:1.05rem; max-width:520px; margin-bottom:34px}
+
+.cta-row{display:flex; gap:14px; flex-wrap:wrap}
+.btn{
+  display:inline-flex; align-items:center; gap:8px; padding:13px 26px;
+  border-radius:30px; text-decoration:none; font-weight:500; font-size:0.95rem;
+  transition:transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  border:1px solid transparent;
+}
+.btn-primary{background:var(--copper-bright); color:#0A0E17}
+.btn-primary:hover{transform:translateY(-2px); box-shadow:0 10px 28px -8px rgba(232,173,115,0.55)}
+.btn-ghost{border-color:var(--border-line); color:var(--text)}
+.btn-ghost:hover{border-color:var(--signal); color:var(--signal); transform:translateY(-2px)}
+
+.hero-visual{position:relative; display:flex; justify-content:center; align-items:center}
+.hero-glow{
+  position:absolute; width:340px; height:340px; border-radius:50%;
+  background:radial-gradient(circle, rgba(92,232,212,0.22), transparent 70%);
+  filter:blur(10px); animation:float 7s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0px)}50%{transform:translateY(-14px)}}
+.portrait-wrap{position:relative; z-index:2; width:340px}
+.portrait-wrap img{width:100%; display:block; filter:drop-shadow(0 22px 40px rgba(0,0,0,0.55))}
+.trace-ring{position:absolute; inset:-30px; z-index:1}
+.trace-ring circle{fill:none; stroke:var(--copper); stroke-width:1; stroke-dasharray:4 10; opacity:0.55; animation:spin 40s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.node{position:absolute; width:9px; height:9px; border-radius:50%; background:var(--signal); box-shadow:0 0 10px var(--signal)}
+
+.scroll-cue{
+  position:absolute; bottom:26px; left:50%; transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--muted-dim);
+  display:flex; flex-direction:column; align-items:center; gap:8px; letter-spacing:0.1em;
+}
+.scroll-cue .line{width:1px; height:34px; background:linear-gradient(var(--signal), transparent); animation:scrolldown 1.8s ease-in-out infinite}
+@keyframes scrolldown{0%{transform:scaleY(0); transform-origin:top}50%{transform:scaleY(1); transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0); transform-origin:bottom}}
+
+/* reveal on scroll */
+.reveal{opacity:0; transform:translateY(28px); transition:opacity 0.7s ease, transform 0.7s ease}
+.reveal.in{opacity:1; transform:translateY(0)}
+
+/* section headers */
+.section-head{margin-bottom:52px; max-width:640px}
+.section-head h2{font-size:clamp(1.8rem,3vw,2.4rem)}
+.section-head p{color:var(--muted); margin-top:12px; font-size:1.02rem}
+
+/* about */
+.about-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:50px; align-items:start}
+.about-text p{color:var(--muted); margin-bottom:16px; font-size:1.02rem}
+.stat-panel{
+  background:var(--surface); border:1px solid var(--border-line); border-radius:var(--radius);
+  padding:30px; display:grid; grid-template-columns:1fr 1fr; gap:26px;
+}
+.stat{text-align:left}
+.stat .num{font-family:'Space Grotesk',sans-serif; font-size:2.1rem; font-weight:700; color:var(--copper-bright)}
+.stat .label{font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-top:4px}
+
+/* skills - component tray */
+.tray-group{margin-bottom:30px}
+.tray-title{font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px}
+.chip-row{display:flex; flex-wrap:wrap; gap:10px}
+.chip{
+  background:var(--surface); border:1px solid var(--border-line); padding:9px 16px;
+  border-radius:8px; font-size:0.9rem; color:var(--text); transition:all 0.25s ease; cursor:default;
+}
+.chip:hover{border-color:var(--signal); color:var(--signal); transform:translateY(-3px)}
+
+/* projects */
+.projects-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:24px}
+.card{
+  background:var(--surface); border:1px solid var(--border-line); border-radius:var(--radius);
+  padding:30px; position:relative; overflow:hidden; transition:transform 0.3s ease, border-color 0.3s ease;
+}
+.card:hover{transform:translateY(-5px); border-color:var(--copper)}
+.card.featured{grid-column:span 2; display:grid; grid-template-columns:1.1fr 0.9fr; gap:30px; align-items:center}
+.card-top{display:flex; align-items:center; gap:10px; margin-bottom:14px}
+.led{width:8px; height:8px; border-radius:50%; background:var(--signal); box-shadow:0 0 8px var(--signal); animation:pulse-dot 2.2s ease-in-out infinite}
+.card-tag{font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em}
+.card h3{font-size:1.3rem; margin-bottom:10px}
+.card p{color:var(--muted); font-size:0.95rem; margin-bottom:16px}
+.tag-row{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px}
+.tag{font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--signal); background:rgba(92,232,212,0.08); padding:4px 10px; border-radius:6px}
+.card-links{display:flex; gap:16px}
+.card-links a{font-size:0.88rem; font-weight:500; color:var(--copper-bright); text-decoration:none; display:flex; align-items:center; gap:5px}
+.card-links a:hover{color:var(--signal)}
+
+/* sparkline */
+.spark{width:100%; height:110px}
+.spark path{fill:none; stroke:var(--signal); stroke-width:2}
+.spark .fill{stroke:none; fill:url(#sparkfill)}
+
+/* experience timeline */
+.timeline{position:relative; padding-left:36px}
+.timeline::before{
+  content:''; position:absolute; left:6px; top:6px; bottom:6px; width:1px;
+  background:linear-gradient(var(--copper), var(--signal-dim));
+}
+.tl-item{position:relative; margin-bottom:44px}
+.tl-item:last-child{margin-bottom:0}
+.tl-item::before{
+  content:''; position:absolute; left:-36px; top:4px; width:13px; height:13px; border-radius:50%;
+  background:var(--bg); border:2px solid var(--copper-bright); box-shadow:0 0 0 4px rgba(200,138,79,0.15);
+}
+.tl-date{font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--signal); margin-bottom:6px}
+.tl-item h3{font-size:1.15rem; margin-bottom:8px}
+.tl-item p{color:var(--muted); font-size:0.95rem; max-width:620px}
+
+/* beyond */
+.beyond-row{display:grid; grid-template-columns:repeat(3,1fr); gap:22px}
+.beyond-card{background:var(--surface); border:1px solid var(--border-line); border-radius:var(--radius); padding:26px}
+.beyond-card h3{font-size:1.05rem; margin-bottom:8px}
+.beyond-card p{color:var(--muted); font-size:0.92rem}
+
+/* contact */
+.contact-section{text-align:center}
+.contact-section .section-head{margin:0 auto 40px; text-align:center}
+.contact-links{display:flex; justify-content:center; gap:16px; flex-wrap:wrap}
+
+footer{
+  border-top:1px solid var(--border-line); padding:34px 6%; text-align:center;
+  font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--muted-dim);
+}
+
+@media(max-width:860px){
+  .hero-inner{grid-template-columns:1fr; text-align:center}
+  .hero-desc{margin-left:auto; margin-right:auto}
+  .cta-row{justify-content:center}
+  .hero-visual{order:-1}
+  .about-grid{grid-template-columns:1fr}
+  .projects-grid{grid-template-columns:1fr}
+  .card.featured{grid-template-columns:1fr}
+  .beyond-row{grid-template-columns:1fr}
+  .nav-links{position:fixed; top:68px; left:0; right:0; background:var(--bg-panel); flex-direction:column; padding:20px 6%; gap:18px; border-bottom:1px solid var(--border-line); display:none}
+  .nav-links.open{display:flex}
+  .nav-toggle{display:block; background:none; border:none; color:var(--text); font-size:1.4rem; cursor:pointer}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important; scroll-behavior:auto !important}
+}
 </style>
 </head>
 <body>
 
+<div class="bg-grid"></div>
+
 <nav>
-<div><b>Athulya</b></div>
-<div>
-<a href="#about">About</a>
-<a href="#skills">Skills</a>
-<a href="#projects">Projects</a>
-<a href="#experience">Experience</a>
-<a href="#contact">Contact</a>
-</div>
+  <div class="nav-inner">
+    <a class="logo" href="#top"><span class="dot"></span>ATHULYA.SIVADASAN</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+  </div>
 </nav>
 
-<section class="hero">
-<h1><em>Athulya<em> <em>Sivadasan</em></h1>
-<p>Electronics and Communication Engineering Student | Embedded Systems | IoT | Microcontroller Programming</p>
-<br>
-<a class="btn" href="#projects">View Projects</a>
+<section class="hero" id="top">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow">ECE · BATCH 2023–2027 · KERALA</div>
+      <h1>Athulya <span class="accent">Sivadasan</span></h1>
+      <div class="role-line"><span id="roleText">Embedded Systems Engineer</span><span class="cursor"></span></div>
+      <p class="hero-desc">Final-year Electronics & Communication Engineering student building explainable edge-AI systems — from vibration sensors to on-device LSTMs. Currently balancing GATE ECE prep with embedded/IoT placement prep.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#projects">View Projects</a>
+        <a class="btn btn-ghost" href="mailto:i.athulyasivadasan@gmail.com">Get in Touch</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-glow"></div>
+      <svg class="trace-ring" viewBox="0 0 400 400"><circle cx="200" cy="200" r="190"/></svg>
+      <div class="portrait-wrap">
+        <img src="athulya_portrait.png" alt="Athulya Sivadasan">
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue"><span class="line"></span>SCROLL</div>
 </section>
 
 <section id="about">
-<h2>About Me</h2>
-<div class="card">
-<p>I am a B.Tech Electronics and Communication Engineering student at Ahalia School of Engineering and Technology, Palakkad. My interests include Embedded Systems, IoT Development, Microcontroller Programming, and Smart Automation.</p>
-<br>
-<p>I enjoy building practical engineering solutions through hardware and software integration. Along with technical skills, I actively participate in public speaking, technical presentations, leadership activities, and engineering communities.</p>
-<br>
-<p><b>CGPA:</b> 7.15</p>
-</div>
+  <div class="container about-grid">
+    <div class="about-text reveal">
+      <div class="eyebrow">About</div>
+      <h2 style="margin-bottom:20px;">Engineering at the sensor-to-inference boundary</h2>
+      <p>I'm a B.Tech ECE student at Ahalia School of Engineering and Technology, Palakkad, working under APJ Abdul Kalam Technological University. My focus sits where hardware meets intelligence — sensor interfacing, embedded firmware, and running machine learning models directly on microcontrollers.</p>
+      <p>I've built systems spanning predictive maintenance, digital-twin health monitoring, and VLSI design, and I actively document each build end-to-end: from schematic to deployed dashboard. Outside the lab, I compete in public speaking and shoot portrait, reel, and wildlife photography across Kerala.</p>
+    </div>
+    <div class="stat-panel reveal">
+      <div class="stat"><div class="num">7.15</div><div class="label">CGPA / Sem 5</div></div>
+      <div class="stat"><div class="num">5+</div><div class="label">Systems Built</div></div>
+      <div class="stat"><div class="num">2</div><div class="label">Internships</div></div>
+      <div class="stat"><div class="num">17/17</div><div class="label">ALU Testbench Pass</div></div>
+    </div>
+  </div>
 </section>
 
 <section id="skills">
-<h2>Skills</h2>
-<div class="skills">
-<span class="skill">Embedded Systems</span>
-<span class="skill">IoT Development</span>
-<span class="skill">Microcontroller Programming</span>
-<span class="skill">Sensor Interfacing</span>
-<span class="skill">Circuit Design</span>
-<span class="skill">Arduino IDE</span>
-<span class="skill">Tinkercad</span>
-<span class="skill">Wokwi</span>
-<span class="skill">MATLAB</span>
-<span class="skill">LTspice</span>
-<span class="skill">C</span>
-<span class="skill">C++</span>
-<span class="skill">Python</span>
-<span class="skill">GitHub</span>
-<span class="skill">Technical Presentations</span>
-<span class="skill">Public Speaking</span>
-<span class="skill">Leadership</span>
-</div>
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Skills</div>
+      <h2>Toolkit</h2>
+      <p>The stack I reach for when a project needs to move from breadboard to firmware to dashboard.</p>
+    </div>
+
+    <div class="tray-group reveal">
+      <div class="tray-title">Embedded & Hardware</div>
+      <div class="chip-row">
+        <span class="chip">ESP32</span><span class="chip">Arduino</span><span class="chip">Sensor Interfacing</span>
+        <span class="chip">Circuit Design</span><span class="chip">Verilog HDL</span><span class="chip">Xilinx Vivado</span>
+      </div>
+    </div>
+    <div class="tray-group reveal">
+      <div class="tray-title">Edge AI & Software</div>
+      <div class="chip-row">
+        <span class="chip">TensorFlow Lite Micro</span><span class="chip">LSTM Models</span><span class="chip">Python</span>
+        <span class="chip">C</span><span class="chip">C++</span><span class="chip">MATLAB</span><span class="chip">LTspice</span>
+      </div>
+    </div>
+    <div class="tray-group reveal">
+      <div class="tray-title">Tools & Platforms</div>
+      <div class="chip-row">
+        <span class="chip">Arduino IDE</span><span class="chip">Tinkercad</span><span class="chip">Wokwi</span>
+        <span class="chip">GitHub</span><span class="chip">ThingSpeak</span><span class="chip">Cloudflare Workers</span>
+      </div>
+    </div>
+    <div class="tray-group reveal">
+      <div class="tray-title">Beyond the Bench</div>
+      <div class="chip-row">
+        <span class="chip">Technical Presentations</span><span class="chip">Public Speaking</span><span class="chip">Leadership</span>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section id="projects">
-<h2>Projects</h2>
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Projects</div>
+      <h2>Selected Builds</h2>
+      <p>Each project pairs a real sensing problem with an on-device or connected intelligence layer.</p>
+    </div>
 
-<div class="grid">
+    <div class="projects-grid">
 
-<div class="card">
-<h3>UltraSmart One</h3>
-<p>IoT-based smart urban management system integrating water management, smart parking, and waste management using ESP32, sensors, and a web dashboard.</p>
-</div>
+      <div class="card featured reveal">
+        <div>
+          <div class="card-top"><span class="led"></span><span class="card-tag">Flagship · NeST Digital Internship</span></div>
+          <h3>Predicta — Edge-AI Predictive Maintenance</h3>
+          <p>An on-device predictive maintenance system for rotating machinery. An ESP32 fuses vibration (MPU6050), temperature (DS18B20), and current (ACS712) readings, then runs an LSTM via TensorFlow Lite for Microcontrollers to classify machine health across five states — Normal, Watch, Warning, Critical, Failure — streamed live to a Progressive Web App dashboard.</p>
+          <div class="tag-row">
+            <span class="tag">ESP32</span><span class="tag">LSTM</span><span class="tag">TFLite Micro</span><span class="tag">ThingSpeak</span><span class="tag">PWA</span>
+          </div>
+          <div class="card-links">
+            <a href="https://github.com/Athulya-Sivadasan/dc-motor-predictive-maintenance" target="_blank" rel="noopener">GitHub Repo ↗</a>
+            <a href="https://athulya-sivadasan.github.io/dc-motor-predictive-maintenance/" target="_blank" rel="noopener">Live Dashboard ↗</a>
+          </div>
+        </div>
+        <div>
+          <svg class="spark" viewBox="0 0 300 110" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="sparkfill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#5CE8D4" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#5CE8D4" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path class="fill" id="sparkFillPath" d=""/>
+            <path id="sparkLinePath" d="" stroke-dasharray="600" stroke-dashoffset="600"/>
+          </svg>
+          <div style="display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--muted)">
+            <span>VIBRATION · TEMP · CURRENT</span><span style="color:var(--signal)">● LIVE FEED</span>
+          </div>
+        </div>
+      </div>
 
-<div class="card">
-<h3>FireGuard – Smart Gas Leakage & Fire Detection System</h3>
-<p>Embedded system designed for gas leak and fire detection using sensors, alarm alerts, and monitoring features for enhanced safety.</p>
-<p><a class="btn" href="https://wokwi.com/makers/athulya_sivadasan">Wokwi</a></p>
-</div>
+      <div class="card reveal">
+        <div class="card-top"><span class="led" style="background:var(--copper-bright); box-shadow:0 0 8px var(--copper-bright)"></span><span class="card-tag">AI Web App</span></div>
+        <h3>Sure Bae</h3>
+        <p>An AI study assistant with a ghost mascot — "No Yap. Just Facts." Powered by Mistral AI through a Cloudflare Worker proxy for fast, no-nonsense answers.</p>
+        <div class="tag-row"><span class="tag">Mistral AI</span><span class="tag">Cloudflare Workers</span></div>
+        <div class="card-links">
+          <a href="https://github.com/Athulya-Sivadasan/sure-bae" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="https://athulya-sivadasan.github.io/sure-bae" target="_blank" rel="noopener">Live App ↗</a>
+        </div>
+      </div>
 
-</div>
+      <div class="card reveal">
+        <div class="card-top"><span class="led" style="background:var(--amber); box-shadow:0 0 8px var(--amber)"></span><span class="card-tag">KTU Mini Project</span></div>
+        <h3>UltraSmart One</h3>
+        <p>IoT-based smart urban management system integrating water management, smart parking, and waste monitoring on ESP32 with a live web dashboard.</p>
+        <div class="tag-row"><span class="tag">ESP32</span><span class="tag">IoT</span><span class="tag">Dashboard</span></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><span class="led"></span><span class="card-tag">Team Project · NeST Digital</span></div>
+        <h3>FireGuard</h3>
+        <p>Smart gas leakage and fire detection system with a three-tier alert pipeline, built with MQ-5 gas and DHT11 sensors on Arduino.</p>
+        <div class="tag-row"><span class="tag">Arduino</span><span class="tag">MQ-5</span><span class="tag">DHT11</span></div>
+        <div class="card-links"><a href="https://wokwi.com/makers/athulya_sivadasan" target="_blank" rel="noopener">Wokwi Sim ↗</a></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><span class="led" style="background:var(--copper-bright); box-shadow:0 0 8px var(--copper-bright)"></span><span class="card-tag">VLSI · Vaidsys Technologies</span></div>
+        <h3>32-bit ALU</h3>
+        <p>A 32-bit Arithmetic Logic Unit designed in Verilog HDL on Xilinx Vivado, verified with a self-checking testbench — 17/17 test cases passed, 9/10 external review score.</p>
+        <div class="tag-row"><span class="tag">Verilog HDL</span><span class="tag">Xilinx Vivado</span></div>
+      </div>
+
+    </div>
+  </div>
 </section>
 
 <section id="experience">
-<h2>Internship Experience</h2>
-<div class="card">
-<h3>NeST Digital Internship</h3>
-<p>Completed internship training focused on Embedded Systems and IoT development. Gained experience in sensor interfacing, hardware implementation, project documentation, testing, and engineering workflows.</p>
-</div>
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Experience</div>
+      <h2>Internships</h2>
+    </div>
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <div class="tl-date">2026 · KAKANAD, KOCHI</div>
+        <h3>Embedded Systems & IoT Intern — NeST Digital</h3>
+        <p>Designed and deployed Predicta end-to-end: sensor integration, on-device LSTM inference, and a live PWA dashboard. Also contributed to FireGuard, a team-built gas and fire detection system. Gained hands-on experience in hardware implementation, project documentation, and testing workflows.</p>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-date">VLSI DESIGN</div>
+        <h3>VLSI Design Intern — Vaidsys Technologies</h3>
+        <p>Designed and verified a 32-bit ALU in Verilog HDL using Xilinx Vivado, building a self-checking testbench that achieved a full 17/17 pass rate and scored 9/10 in external review.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section id="contact">
-<h2>Connect With Me</h2>
-<div class="card">
-<p><a class="btn" href="mailto:i.athulyasivadasan@gmail.com">Gmail</a></p>
-<p><a class="btn" href="https://github.com/Athulya-Sivadasan">GitHub</a></p>
-<p><a class="btn" href="https://www.linkedin.com/in/athulya-sivadasan">LinkedIn</a></p>
-<p><a class="btn" href="https://wokwi.com/makers/athulya_sivadasan">Wokwi</a></p>
-</div>
+<section id="beyond">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Beyond the Bench</div>
+      <h2>Outside the Lab</h2>
+    </div>
+    <div class="beyond-row">
+      <div class="beyond-card reveal">
+        <h3>Public Speaking</h3>
+        <p>Competitive Malayalam-language speaker and English extempore winner — first prize at school level.</p>
+      </div>
+      <div class="beyond-card reveal">
+        <h3>Content Creation</h3>
+        <p>Shoots portraits, reels, and nature & wildlife photography and videography across Kerala.</p>
+      </div>
+      <div class="beyond-card reveal">
+        <h3>GATE ECE Prep</h3>
+        <p>Preparing alongside placement search — building core fundamentals through NPTEL and structured problem practice.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow" style="justify-content:center">Contact</div>
+      <h2>Let's Connect</h2>
+      <p>Open to Embedded AI / IoT roles, collaborations, and conversations about edge intelligence.</p>
+    </div>
+    <div class="contact-links reveal">
+      <a class="btn btn-primary" href="mailto:i.athulyasivadasan@gmail.com">Email</a>
+      <a class="btn btn-ghost" href="https://github.com/Athulya-Sivadasan" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/athulyasivadasan" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-ghost" href="https://wokwi.com/makers/athulya_sivadasan" target="_blank" rel="noopener">Wokwi</a>
+    </div>
+  </div>
 </section>
 
 <footer>
-Designed and Developed by Athulya Sivadasan © 2026
+  DESIGNED &amp; DEVELOPED BY ATHULYA SIVADASAN © 2026
 </footer>
 
+<script>
+// mobile nav
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+// role text cycling
+const roles = ['Embedded Systems Engineer','IoT Developer','Edge AI Enthusiast','GATE ECE Aspirant'];
+let roleIdx = 0;
+const roleEl = document.getElementById('roleText');
+setInterval(() => {
+  roleIdx = (roleIdx + 1) % roles.length;
+  roleEl.style.opacity = 0;
+  setTimeout(() => { roleEl.textContent = roles[roleIdx]; roleEl.style.opacity = 1; }, 300);
+}, 3200);
+roleEl.style.transition = 'opacity 0.3s ease';
+
+// scroll reveal
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.15 });
+revealEls.forEach(el => io.observe(el));
+
+// sparkline draw-in for Predicta card
+function buildSpark(){
+  const pts = [90,60,75,40,85,30,95,25,70,50,88,20,60,45,92];
+  const w = 300, h = 110, step = w/(pts.length-1);
+  let d = `M0,${h-pts[0]}`;
+  pts.forEach((p,i) => { if(i>0) d += ` L${i*step},${h-p}`; });
+  document.getElementById('sparkLinePath').setAttribute('d', d);
+  document.getElementById('sparkFillPath').setAttribute('d', d + ` L${w},${h} L0,${h} Z`);
+}
+buildSpark();
+const sparkPath = document.getElementById('sparkLinePath');
+const sparkObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      sparkPath.style.transition = 'stroke-dashoffset 1.8s ease';
+      sparkPath.style.strokeDashoffset = '0';
+      sparkObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+sparkObserver.observe(document.querySelector('.card.featured'));
+</script>
 </body>
 </html>
