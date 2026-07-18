@@ -49,6 +49,47 @@ body{
   mask-image:radial-gradient(ellipse 100% 60% at 50% 0%, black 0%, transparent 80%);
 }
 
+/* ---- ambient animated background: floating gradient blobs ---- */
+.bg-blobs{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+.blob{
+  position:absolute; border-radius:50%; filter:blur(70px); opacity:0.35;
+  will-change:transform;
+}
+.blob-1{
+  width:640px; height:640px; top:-220px; left:-160px;
+  background:radial-gradient(circle at 30% 30%, var(--signal-bright), transparent 70%);
+  animation:blobDrift1 26s ease-in-out infinite;
+}
+.blob-2{
+  width:560px; height:560px; top:30%; right:-200px;
+  background:radial-gradient(circle at 60% 40%, var(--copper-bright), transparent 70%);
+  animation:blobDrift2 32s ease-in-out infinite;
+}
+.blob-3{
+  width:520px; height:520px; bottom:-180px; left:20%;
+  background:radial-gradient(circle at 50% 50%, var(--amber), transparent 72%);
+  opacity:0.22;
+  animation:blobDrift3 38s ease-in-out infinite;
+}
+@keyframes blobDrift1{
+  0%,100%{ transform:translate(0,0) scale(1); }
+  33%{ transform:translate(90px,60px) scale(1.12); }
+  66%{ transform:translate(-40px,120px) scale(0.94); }
+}
+@keyframes blobDrift2{
+  0%,100%{ transform:translate(0,0) scale(1); }
+  40%{ transform:translate(-110px,80px) scale(1.08); }
+  70%{ transform:translate(-50px,-70px) scale(0.95); }
+}
+@keyframes blobDrift3{
+  0%,100%{ transform:translate(0,0) scale(1); }
+  50%{ transform:translate(80px,-90px) scale(1.15); }
+}
+#circuitCanvas{ position:fixed; inset:0; z-index:0; pointer-events:none; width:100%; height:100%; opacity:0.55; }
+@media(prefers-reduced-motion:reduce){
+  .blob{ animation:none !important; }
+}
+
 .cursor-glow{
   position:fixed; width:460px; height:460px; border-radius:50%; z-index:0; pointer-events:none;
   background:radial-gradient(circle, rgba(6,182,212,0.07), transparent 70%);
@@ -146,8 +187,9 @@ nav{
 /* ---- collage visual ---- */
 .hero-visual{ position:relative; display:flex; justify-content:center; align-items:center; min-height:520px; }
 .collage-trace{ position:absolute; inset:0; z-index:0; }
-.collage-trace path{ fill:none; stroke:var(--border-strong); stroke-width:1.4; stroke-dasharray:520; stroke-dashoffset:520; animation:draw 2.4s ease 0.4s forwards; }
-@keyframes draw{to{stroke-dashoffset:0}}
+.collage-trace path{ fill:none; stroke:var(--signal-bright); stroke-width:1.4; stroke-dasharray:14 10; opacity:0.55; animation:flowCurrent 3.6s linear infinite; }
+@keyframes flowCurrent{ from{ stroke-dashoffset:0; } to{ stroke-dashoffset:-480; } }
+@media(prefers-reduced-motion:reduce){ .collage-trace path{ animation:none; } }
 
 .photo-card{
   position:relative; z-index:3; width:300px; background:var(--paper);
@@ -348,6 +390,12 @@ footer{
 <body>
 
 <div class="bg-grid"></div>
+<div class="bg-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+<canvas id="circuitCanvas" aria-hidden="true"></canvas>
 <div class="cursor-glow" id="cursorGlow"></div>
 
 <div class="power-rail" id="powerRail" aria-hidden="true">
@@ -702,6 +750,132 @@ footer{
 </div>
 
 <script>
+// ===== Ambient animated circuit-trace background (canvas) =====
+(function(){
+  const canvas = document.getElementById('circuitCanvas');
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, DPR;
+  let paths = [];
+  let pulses = [];
+
+  const rootStyles = getComputedStyle(document.documentElement);
+  const colorSignal = rootStyles.getPropertyValue('--signal-bright').trim() || '#06B6D4';
+  const colorCopper = rootStyles.getPropertyValue('--copper-bright').trim() || '#3B82F6';
+  const colorLine = 'rgba(15,23,42,0.07)';
+
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth;
+    H = document.documentElement.scrollHeight;
+    canvas.width = W * DPR;
+    canvas.height = H * DPR;
+    canvas.style.height = H + 'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    buildPaths();
+  }
+
+  // Build a set of right-angle "PCB trace" paths across the page
+  function buildPaths(){
+    paths = [];
+    const cols = Math.max(4, Math.floor(W / 260));
+    const rowH = 340;
+    const rows = Math.max(2, Math.ceil(H / rowH));
+    for(let r = 0; r < rows; r++){
+      for(let c = 0; c < cols; c++){
+        if(Math.random() > 0.55) continue;
+        const x0 = (c / cols) * W + Math.random()*60;
+        const y0 = r * rowH + Math.random()*80;
+        const midX = x0 + (60 + Math.random()*120) * (Math.random() > 0.5 ? 1 : -1);
+        const midY = y0 + 70 + Math.random()*90;
+        const x1 = midX + (40 + Math.random()*100);
+        const y1 = midY + 60 + Math.random()*100;
+        paths.push({
+          pts:[ {x:x0,y:y0}, {x:midX,y:y0}, {x:midX,y:midY}, {x:x1,y:midY}, {x:x1,y:y1} ],
+          color: Math.random() > 0.5 ? colorSignal : colorCopper
+        });
+      }
+    }
+    // precompute segment lengths for pulse travel
+    paths.forEach(p => {
+      let total = 0;
+      p.segLens = [];
+      for(let i=0;i<p.pts.length-1;i++){
+        const dx = p.pts[i+1].x - p.pts[i].x, dy = p.pts[i+1].y - p.pts[i].y;
+        const len = Math.hypot(dx,dy);
+        p.segLens.push(len);
+        total += len;
+      }
+      p.totalLen = total;
+    });
+    // seed a pulse per path (staggered)
+    pulses = paths.map((p,i) => ({
+      pathIndex:i,
+      dist: Math.random() * p.totalLen,
+      speed: 40 + Math.random()*50
+    }));
+  }
+
+  function pointAtDistance(path, dist){
+    let d = ((dist % path.totalLen) + path.totalLen) % path.totalLen;
+    for(let i=0;i<path.segLens.length;i++){
+      if(d <= path.segLens[i]){
+        const t = path.segLens[i] === 0 ? 0 : d / path.segLens[i];
+        const a = path.pts[i], b = path.pts[i+1];
+        return { x:a.x + (b.x-a.x)*t, y:a.y + (b.y-a.y)*t };
+      }
+      d -= path.segLens[i];
+    }
+    return path.pts[path.pts.length-1];
+  }
+
+  function draw(dt){
+    ctx.clearRect(0,0,W,H);
+    // static traces
+    ctx.lineWidth = 1;
+    paths.forEach(p => {
+      ctx.strokeStyle = colorLine;
+      ctx.beginPath();
+      p.pts.forEach((pt,i) => i===0 ? ctx.moveTo(pt.x,pt.y) : ctx.lineTo(pt.x,pt.y));
+      ctx.stroke();
+      // junction dots
+      ctx.fillStyle = 'rgba(15,23,42,0.10)';
+      p.pts.forEach(pt => { ctx.beginPath(); ctx.arc(pt.x,pt.y,1.6,0,Math.PI*2); ctx.fill(); });
+    });
+    // traveling glowing pulses
+    pulses.forEach(pulse => {
+      const path = paths[pulse.pathIndex];
+      if(!path || path.totalLen === 0) return;
+      if(!reduceMotion) pulse.dist += pulse.speed * dt;
+      const pos = pointAtDistance(path, pulse.dist);
+      const grad = ctx.createRadialGradient(pos.x,pos.y,0,pos.x,pos.y,7);
+      grad.addColorStop(0, path.color);
+      grad.addColorStop(1, 'transparent');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(pos.x,pos.y,7,0,Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle = path.color;
+      ctx.beginPath();
+      ctx.arc(pos.x,pos.y,1.8,0,Math.PI*2);
+      ctx.fill();
+    });
+  }
+
+  let last = performance.now();
+  function loop(now){
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    draw(dt);
+    requestAnimationFrame(loop);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  window.addEventListener('load', resize);
+  requestAnimationFrame(loop);
+})();
+
 // mobile nav
 const navToggle = document.getElementById('navToggle');
 const navLinks = document.getElementById('navLinks');
