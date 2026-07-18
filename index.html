@@ -4,26 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Athulya Sivadasan | Embedded Systems & Edge AI Engineer</title>
-<meta name="description" content="Portfolio of Athulya Sivadasan — Electronics & Communication Engineering student specializing in Edge AI, Embedded Systems & IoT, VLSI, and Robotics.">
+<meta name="description" content="Portfolio of Athulya Sivadasan — Electronics & Communication Engineering undergraduate specializing in Edge AI, Embedded Systems & IoT, VLSI Design, and Robotics.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#080B13;
-  --bg-panel:#0E1524;
-  --surface:#141D30;
-  --surface-hi:#1B2740;
-  --border-line:#22304A;
-  --copper:#C88A4F;
-  --copper-bright:#E8AD73;
-  --signal:#5CE8D4;
-  --signal-dim:#3A8F84;
-  --amber:#E3B341;
-  --text:#EDF2FA;
-  --muted:#8E9BB5;
-  --muted-dim:#5D6884;
-  --radius:14px;
+  --bg:#F2F4F3;
+  --paper:#FBFCFB;
+  --surface:#FFFFFF;
+  --ink:#16202C;
+  --ink-soft:#33404F;
+  --muted:#63707E;
+  --muted-dim:#8E99A6;
+  --border:#DCE2E3;
+  --border-strong:#C4CCCD;
+  --copper:#A85F26;
+  --copper-bright:#C97B34;
+  --signal:#0E8E7E;
+  --signal-bright:#12A895;
+  --signal-tint:rgba(14,142,126,0.08);
+  --amber:#B4830F;
+  --radius:16px;
   --maxw:1180px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -31,52 +33,46 @@ html{scroll-behavior:smooth}
 body{
   font-family:'Inter',Arial,sans-serif;
   background:var(--bg);
-  color:var(--text);
-  line-height:1.65;
+  color:var(--ink-soft);
+  line-height:1.68;
   overflow-x:hidden;
   position:relative;
 }
-::selection{background:var(--copper);color:#0A0E17}
+::selection{background:var(--signal-bright);color:#fff}
 
 .bg-grid{
   position:fixed; inset:0; z-index:0; pointer-events:none;
   background-image:
-    linear-gradient(rgba(92,232,212,0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(92,232,212,0.035) 1px, transparent 1px);
-  background-size:42px 42px;
-  mask-image:radial-gradient(ellipse 90% 60% at 50% 0%, black 0%, transparent 75%);
+    linear-gradient(rgba(22,32,44,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22,32,44,0.05) 1px, transparent 1px);
+  background-size:44px 44px;
+  mask-image:radial-gradient(ellipse 100% 60% at 50% 0%, black 0%, transparent 80%);
 }
 
-/* cursor glow */
 .cursor-glow{
-  position:fixed; width:420px; height:420px; border-radius:50%; z-index:0; pointer-events:none;
-  background:radial-gradient(circle, rgba(92,232,212,0.05), transparent 70%);
+  position:fixed; width:460px; height:460px; border-radius:50%; z-index:0; pointer-events:none;
+  background:radial-gradient(circle, rgba(14,142,126,0.07), transparent 70%);
   transform:translate(-50%,-50%); transition:opacity 0.4s ease; left:0; top:0; opacity:0;
 }
 
-/* signature: vertical power-trace showing scroll progress */
 .power-rail{
   position:fixed; left:22px; top:50%; transform:translateY(-50%); z-index:60;
-  display:flex; flex-direction:column; align-items:center; gap:0;
-  height:46vh;
+  display:flex; flex-direction:column; align-items:center; gap:0; height:46vh;
 }
-.power-rail .rail-line{
-  width:2px; flex:1; background:var(--border-line); position:relative; border-radius:2px; overflow:hidden;
-}
+.power-rail .rail-line{ width:2px; flex:1; background:var(--border); position:relative; border-radius:2px; overflow:hidden; }
 .power-rail .rail-fill{
   position:absolute; left:0; top:0; width:100%; height:0%;
-  background:linear-gradient(var(--copper), var(--signal));
+  background:linear-gradient(var(--copper-bright), var(--signal-bright));
   transition:height 0.15s linear;
-  box-shadow:0 0 10px var(--signal);
 }
 .power-rail .rail-node{
-  width:8px; height:8px; border-radius:50%; background:var(--border-line); border:1px solid var(--muted-dim);
-  transition:background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  width:9px; height:9px; border-radius:50%; background:var(--surface); border:2px solid var(--border-strong);
+  transition:background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; cursor:pointer;
 }
-.power-rail .rail-node.active{ background:var(--signal); border-color:var(--signal); box-shadow:0 0 10px var(--signal) }
+.power-rail .rail-node.active{ background:var(--signal-bright); border-color:var(--signal-bright); box-shadow:0 0 0 4px var(--signal-tint) }
 @media(max-width:1100px){ .power-rail{display:none} }
 
-h1,h2,h3{font-family:'Space Grotesk',sans-serif; font-weight:600; letter-spacing:-0.01em}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif; font-weight:600; letter-spacing:-0.01em; color:var(--ink)}
 .mono{font-family:'JetBrains Mono',monospace}
 .eyebrow{
   font-family:'JetBrains Mono',monospace; font-size:0.78rem; letter-spacing:0.14em;
@@ -87,12 +83,12 @@ h1,h2,h3{font-family:'Space Grotesk',sans-serif; font-weight:600; letter-spacing
 
 a{color:inherit}
 .container{max-width:var(--maxw); margin:0 auto; padding:0 6%; position:relative; z-index:1}
-section{padding:110px 0}
+section{padding:112px 0}
 
 nav{
   position:sticky; top:0; z-index:50;
-  background:rgba(8,11,19,0.78); backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--border-line);
+  background:rgba(251,252,251,0.82); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
 }
 .nav-inner{
   max-width:var(--maxw); margin:0 auto; padding:0 6%;
@@ -100,36 +96,29 @@ nav{
 }
 .logo{
   font-family:'JetBrains Mono',monospace; font-weight:500; font-size:1rem;
-  display:flex; align-items:center; gap:8px; color:var(--text); text-decoration:none;
+  display:flex; align-items:center; gap:8px; color:var(--ink); text-decoration:none;
 }
-.logo .dot{width:8px;height:8px;border-radius:50%;background:var(--signal); box-shadow:0 0 8px var(--signal); animation:pulse-dot 2.4s ease-in-out infinite}
+.logo .dot{width:8px;height:8px;border-radius:50%;background:var(--signal-bright); box-shadow:0 0 0 4px var(--signal-tint); animation:pulse-dot 2.4s ease-in-out infinite}
 .nav-links{display:flex; gap:30px; list-style:none}
 .nav-links a{
   text-decoration:none; color:var(--muted); font-size:0.92rem; font-weight:500;
   position:relative; transition:color 0.25s;
 }
 .nav-links a::after{
-  content:''; position:absolute; left:0; bottom:-6px; width:0; height:1px;
-  background:var(--copper-bright); transition:width 0.25s;
+  content:''; position:absolute; left:0; bottom:-6px; width:0; height:2px;
+  background:var(--copper-bright); transition:width 0.25s; border-radius:2px;
 }
-.nav-links a:hover{color:var(--text)}
+.nav-links a:hover{color:var(--ink)}
 .nav-links a:hover::after{width:100%}
 .nav-toggle{display:none}
 
 @keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:0.35}}
 
-/* hero */
-.hero{
-  padding:80px 0 60px; min-height:88vh; display:flex; align-items:center; position:relative;
-}
-.hero-inner{
-  display:grid; grid-template-columns:1.05fr 0.95fr; gap:40px; align-items:center; width:100%;
-}
+/* ============ HERO ============ */
+.hero{ padding:76px 0 60px; min-height:90vh; display:flex; align-items:center; position:relative; }
+.hero-inner{ display:grid; grid-template-columns:1fr 0.95fr; gap:56px; align-items:center; width:100%; }
 .hero-copy .eyebrow{margin-bottom:20px; opacity:0; animation:fadeUp 0.7s ease 0.1s forwards}
-.hero h1{
-  font-size:clamp(2.6rem,5vw,4.2rem); line-height:1.04; margin-bottom:20px;
-  opacity:0; animation:fadeUp 0.8s ease 0.25s forwards;
-}
+.hero h1{ font-size:clamp(2.6rem,5vw,4.1rem); line-height:1.05; margin-bottom:20px; opacity:0; animation:fadeUp 0.8s ease 0.25s forwards; }
 .hero h1 .accent{color:var(--copper-bright)}
 .role-line{
   font-family:'JetBrains Mono',monospace; font-size:1.05rem; color:var(--signal);
@@ -138,12 +127,9 @@ nav{
 }
 .role-line .cursor{display:inline-block; width:2px; height:1.1em; background:var(--signal); margin-left:2px; animation:blink 1s step-end infinite}
 @keyframes blink{50%{opacity:0}}
-@keyframes fadeUp{from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:translateY(0)}}
-.hero-desc{
-  color:var(--muted); font-size:1.05rem; max-width:540px; margin-bottom:34px;
-  opacity:0; animation:fadeUp 0.8s ease 0.55s forwards;
-}
-.hero-desc strong{color:var(--text); font-weight:600}
+@keyframes fadeUp{from{opacity:0; transform:translateY(18px)} to{opacity:1; transform:translateY(0)}}
+.hero-desc{ color:var(--muted); font-size:1.05rem; max-width:540px; margin-bottom:34px; opacity:0; animation:fadeUp 0.8s ease 0.55s forwards; }
+.hero-desc strong{color:var(--ink); font-weight:600}
 
 .cta-row{display:flex; gap:14px; flex-wrap:wrap; opacity:0; animation:fadeUp 0.8s ease 0.7s forwards}
 .btn{
@@ -152,26 +138,49 @@ nav{
   transition:transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
   border:1px solid transparent;
 }
-.btn-primary{background:var(--copper-bright); color:#0A0E17}
-.btn-primary:hover{transform:translateY(-2px); box-shadow:0 10px 28px -8px rgba(232,173,115,0.55)}
-.btn-ghost{border-color:var(--border-line); color:var(--text)}
+.btn-primary{background:var(--ink); color:#fff}
+.btn-primary:hover{transform:translateY(-2px); box-shadow:0 12px 28px -10px rgba(22,32,44,0.45)}
+.btn-ghost{border-color:var(--border-strong); color:var(--ink); background:var(--surface)}
 .btn-ghost:hover{border-color:var(--signal); color:var(--signal); transform:translateY(-2px)}
 
-.hero-visual{position:relative; display:flex; justify-content:center; align-items:center; opacity:0; animation:fadeIn 1s ease 0.3s forwards}
-@keyframes fadeIn{from{opacity:0} to{opacity:1}}
-.hero-glow{
-  position:absolute; width:360px; height:360px; border-radius:50%;
-  background:radial-gradient(circle, rgba(92,232,212,0.22), transparent 70%);
-  filter:blur(10px); animation:float 7s ease-in-out infinite;
+/* ---- collage visual ---- */
+.hero-visual{ position:relative; display:flex; justify-content:center; align-items:center; min-height:520px; }
+.collage-trace{ position:absolute; inset:0; z-index:0; }
+.collage-trace path{ fill:none; stroke:var(--border-strong); stroke-width:1.4; stroke-dasharray:520; stroke-dashoffset:520; animation:draw 2.4s ease 0.4s forwards; }
+@keyframes draw{to{stroke-dashoffset:0}}
+
+.photo-card{
+  position:relative; z-index:3; width:300px; background:var(--paper);
+  border:1px solid var(--border); border-radius:18px; padding:16px 16px 22px;
+  box-shadow:0 30px 60px -24px rgba(22,32,44,0.28);
+  transform:rotate(-3.5deg);
+  opacity:0; animation:collageIn 0.9s cubic-bezier(.2,.8,.2,1) 0.3s forwards;
+  animation-name:collageIn, floatSlow;
+  animation-duration:0.9s, 7s;
+  animation-delay:0.3s, 1.4s;
+  animation-timing-function:cubic-bezier(.2,.8,.2,1), ease-in-out;
+  animation-iteration-count:1, infinite;
+  animation-fill-mode:forwards, none;
 }
-@keyframes float{0%,100%{transform:translateY(0px)}50%{transform:translateY(-14px)}}
-.portrait-wrap{position:relative; z-index:2; width:320px; animation:float 7s ease-in-out infinite; animation-delay:-2s}
-.portrait-wrap img{width:100%; display:block; filter:drop-shadow(0 22px 40px rgba(0,0,0,0.55))}
-.trace-ring{position:absolute; inset:-40px; z-index:1}
-.trace-ring circle{fill:none; stroke:var(--copper); stroke-width:1; stroke-dasharray:4 10; opacity:0.55; animation:spin 40s linear infinite}
-.trace-ring circle.r2{stroke:var(--signal-dim); stroke-dasharray:2 6; animation-duration:60s; animation-direction:reverse}
-@keyframes spin{to{transform:rotate(360deg)}}
-.node{position:absolute; width:9px; height:9px; border-radius:50%; background:var(--signal); box-shadow:0 0 10px var(--signal); animation:pulse-dot 2.4s ease-in-out infinite}
+@keyframes collageIn{ from{opacity:0; transform:rotate(-3.5deg) translateY(30px) scale(0.92)} to{opacity:1; transform:rotate(-3.5deg) translateY(0) scale(1)} }
+@keyframes floatSlow{ 0%,100%{transform:rotate(-3.5deg) translateY(0)} 50%{transform:rotate(-3.5deg) translateY(-10px)} }
+.photo-card .frame{ background:linear-gradient(160deg,#EDEFEE,#E1E5E4); border-radius:12px; overflow:hidden; aspect-ratio:4/5; display:flex; align-items:flex-end; justify-content:center; }
+.photo-card img{ width:86%; display:block; filter:drop-shadow(0 14px 18px rgba(22,32,44,0.22)); }
+.photo-card .cap{ margin-top:14px; font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.08em; color:var(--muted-dim); text-transform:uppercase; text-align:center; }
+
+.tag-badge{
+  position:absolute; z-index:4; background:var(--ink); color:#fff; padding:10px 16px; border-radius:12px;
+  font-family:'JetBrains Mono',monospace; font-size:0.72rem; letter-spacing:0.05em;
+  box-shadow:0 16px 34px -14px rgba(22,32,44,0.5);
+  opacity:0; animation:popIn 0.6s cubic-bezier(.2,.8,.2,1) forwards, floatSlow2 6s ease-in-out infinite;
+}
+@keyframes popIn{ from{opacity:0; transform:scale(0.7) rotate(var(--rot,0deg))} to{opacity:1; transform:scale(1) rotate(var(--rot,0deg))} }
+@keyframes floatSlow2{ 0%,100%{transform:translateY(0) rotate(var(--rot,0deg))} 50%{transform:translateY(-8px) rotate(var(--rot,0deg))} }
+.tag-badge.b1{ --rot:5deg; top:6%; right:2%; animation-delay:0.9s,2.2s; background:var(--surface); color:var(--ink); border:1px solid var(--border); }
+.tag-badge.b2{ --rot:-4deg; bottom:14%; left:-2%; animation-delay:1.1s,1.8s; background:var(--copper-bright); color:#fff; }
+.tag-badge.b3{ --rot:6deg; bottom:2%; right:6%; animation-delay:1.3s,2.6s; background:var(--signal-bright); color:#fff; }
+
+.dot-node{ position:absolute; width:8px; height:8px; border-radius:50%; background:var(--signal-bright); z-index:2; animation:pulse-dot 2.4s ease-in-out infinite; }
 
 .scroll-cue{
   position:absolute; bottom:26px; left:50%; transform:translateX(-50%);
@@ -184,145 +193,150 @@ nav{
 .reveal{opacity:0; transform:translateY(28px); transition:opacity 0.7s ease, transform 0.7s ease}
 .reveal.in{opacity:1; transform:translateY(0)}
 
-.section-head{margin-bottom:52px; max-width:640px}
+.section-head{margin-bottom:52px; max-width:660px}
 .section-head h2{font-size:clamp(1.8rem,3vw,2.4rem)}
 .section-head p{color:var(--muted); margin-top:12px; font-size:1.02rem}
 
-/* focus areas — signature grid */
-.focus-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:20px}
-.focus-card{
-  background:var(--surface); border:1px solid var(--border-line); border-radius:var(--radius);
-  padding:28px 24px; position:relative; overflow:hidden; transition:transform 0.35s ease, border-color 0.35s ease;
+/* ============ FOCUS AREAS (accordion) ============ */
+.focus-list{ display:flex; flex-direction:column; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--surface); }
+.focus-item{ border-bottom:1px solid var(--border); }
+.focus-item:last-child{ border-bottom:none; }
+.focus-trigger{
+  width:100%; display:flex; align-items:center; gap:20px; padding:26px 28px; background:none; border:none;
+  cursor:pointer; text-align:left; font-family:inherit; transition:background 0.3s ease;
 }
-.focus-card::before{
-  content:''; position:absolute; inset:0; opacity:0; transition:opacity 0.35s ease;
-  background:radial-gradient(circle at 30% 0%, rgba(92,232,212,0.12), transparent 60%);
-}
-.focus-card:hover{transform:translateY(-6px); border-color:var(--signal)}
-.focus-card:hover::before{opacity:1}
-.focus-icon{width:44px; height:44px; margin-bottom:18px}
-.focus-card h3{font-size:1.08rem; margin-bottom:10px}
-.focus-card p{color:var(--muted); font-size:0.9rem}
+.focus-trigger:hover{ background:var(--signal-tint); }
+.focus-icon{ width:38px; height:38px; flex-shrink:0; }
+.focus-trigger .ft-text{ flex:1; }
+.focus-trigger h3{ font-size:1.12rem; margin-bottom:4px; display:flex; align-items:center; gap:10px; }
+.focus-trigger .ft-num{ font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--muted-dim); }
+.focus-trigger .ft-teaser{ color:var(--muted); font-size:0.92rem; }
+.focus-chevron{ width:20px; height:20px; flex-shrink:0; transition:transform 0.35s cubic-bezier(.2,.8,.2,1); color:var(--muted-dim); }
+.focus-item.open .focus-chevron{ transform:rotate(135deg); color:var(--signal); }
+.focus-panel{ max-height:0; overflow:hidden; transition:max-height 0.45s cubic-bezier(.2,.8,.2,1); }
+.focus-item.open .focus-panel{ max-height:260px; }
+.focus-panel-inner{ padding:0 28px 28px 86px; color:var(--muted); font-size:0.95rem; max-width:640px; }
 
-/* about */
+/* ============ ABOUT ============ */
 .about-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:50px; align-items:start}
 .about-text p{color:var(--muted); margin-bottom:16px; font-size:1.02rem}
 .stat-panel{
-  background:var(--surface); border:1px solid var(--border-line); border-radius:var(--radius);
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
   padding:30px; display:grid; grid-template-columns:1fr 1fr; gap:26px;
 }
 .stat{text-align:left}
 .stat .num{font-family:'Space Grotesk',sans-serif; font-size:2.1rem; font-weight:700; color:var(--copper-bright)}
 .stat .label{font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-top:4px}
 
-/* skills */
+/* ============ SKILLS ============ */
 .tray-group{margin-bottom:30px}
 .tray-title{font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px}
 .chip-row{display:flex; flex-wrap:wrap; gap:10px}
 .chip{
-  background:var(--surface); border:1px solid var(--border-line); padding:9px 16px;
-  border-radius:8px; font-size:0.9rem; color:var(--text); transition:all 0.25s ease; cursor:default;
+  background:var(--surface); border:1px solid var(--border); padding:9px 16px;
+  border-radius:8px; font-size:0.9rem; color:var(--ink-soft); transition:all 0.25s ease; cursor:default;
 }
-.chip:hover{border-color:var(--signal); color:var(--signal); transform:translateY(-3px)}
+.chip:hover{border-color:var(--signal); color:var(--signal); transform:translateY(-3px); box-shadow:0 8px 16px -10px rgba(14,142,126,0.4)}
 
-/* video reel */
-.reel-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px}
-.reel-card{
-  background:var(--surface); border:1px solid var(--border-line); border-radius:var(--radius);
-  overflow:hidden; transition:transform 0.3s ease, border-color 0.3s ease;
-}
-.reel-card:hover{transform:translateY(-5px); border-color:var(--copper)}
-.reel-frame{position:relative; aspect-ratio:16/9; background:#0A0E17; overflow:hidden}
-.reel-frame video{width:100%; height:100%; object-fit:cover; display:block}
-.reel-play{
-  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-  background:rgba(8,11,19,0.15); cursor:pointer; transition:background 0.25s ease;
-}
-.reel-play:hover{background:rgba(8,11,19,0.35)}
-.reel-play svg{width:56px; height:56px; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5))}
-.reel-play.hidden{display:none}
-.reel-meta{padding:18px 20px}
-.reel-meta .card-tag{display:block; margin-bottom:6px}
-.reel-meta h3{font-size:1rem; margin-bottom:6px}
-.reel-meta p{color:var(--muted); font-size:0.86rem}
-.reel-note{
-  margin-top:22px; font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--muted-dim);
-  border-left:2px solid var(--border-line); padding-left:14px;
-}
-
-/* projects */
+/* ============ PROJECTS (click-to-reveal) ============ */
 .projects-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:24px}
 .card{
-  background:var(--surface); border:1px solid var(--border-line); border-radius:var(--radius);
-  padding:30px; position:relative; overflow:hidden; transition:transform 0.3s ease, border-color 0.3s ease;
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:30px; position:relative; overflow:hidden; transition:transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor:pointer; text-align:left; font-family:inherit; width:100%;
 }
-.card:hover{transform:translateY(-5px); border-color:var(--copper)}
-.card.featured{grid-column:span 2; display:grid; grid-template-columns:1.1fr 0.9fr; gap:30px; align-items:center}
+.card:hover{transform:translateY(-6px); border-color:var(--copper-bright); box-shadow:0 24px 40px -22px rgba(22,32,44,0.25)}
+.card.featured{grid-column:span 2; display:grid; grid-template-columns:1.1fr 0.9fr; gap:30px; align-items:center; cursor:pointer;}
 .card-top{display:flex; align-items:center; gap:10px; margin-bottom:14px}
-.led{width:8px; height:8px; border-radius:50%; background:var(--signal); box-shadow:0 0 8px var(--signal); animation:pulse-dot 2.2s ease-in-out infinite}
+.led{width:8px; height:8px; border-radius:50%; background:var(--signal-bright); box-shadow:0 0 0 3px var(--signal-tint); animation:pulse-dot 2.2s ease-in-out infinite}
 .card-tag{font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em}
 .card h3{font-size:1.3rem; margin-bottom:10px}
 .card p{color:var(--muted); font-size:0.95rem; margin-bottom:16px}
 .tag-row{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px}
-.tag{font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--signal); background:rgba(92,232,212,0.08); padding:4px 10px; border-radius:6px}
-.card-links{display:flex; gap:16px}
-.card-links a{font-size:0.88rem; font-weight:500; color:var(--copper-bright); text-decoration:none; display:flex; align-items:center; gap:5px}
-.card-links a:hover{color:var(--signal)}
+.tag{font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--signal); background:var(--signal-tint); padding:4px 10px; border-radius:6px}
+.card-cta{font-size:0.88rem; font-weight:600; color:var(--copper-bright); display:flex; align-items:center; gap:6px}
+.card-cta svg{width:14px; height:14px; transition:transform 0.25s ease}
+.card:hover .card-cta svg{transform:translateX(4px)}
 
 .spark{width:100%; height:110px}
-.spark path{fill:none; stroke:var(--signal); stroke-width:2}
+.spark path{fill:none; stroke:var(--signal-bright); stroke-width:2}
 .spark .fill{stroke:none; fill:url(#sparkfill)}
 
-/* experience timeline */
-.timeline{position:relative; padding-left:36px}
-.timeline::before{
-  content:''; position:absolute; left:6px; top:6px; bottom:6px; width:1px;
-  background:linear-gradient(var(--copper), var(--signal-dim));
+/* modal */
+.modal-backdrop{
+  position:fixed; inset:0; z-index:100; background:rgba(22,32,44,0.42); backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center; padding:24px;
+  opacity:0; pointer-events:none; transition:opacity 0.3s ease;
 }
+.modal-backdrop.open{ opacity:1; pointer-events:auto; }
+.modal-box{
+  background:var(--paper); border-radius:20px; max-width:640px; width:100%; max-height:86vh; overflow-y:auto;
+  padding:40px; position:relative; box-shadow:0 40px 80px -30px rgba(22,32,44,0.5);
+  transform:scale(0.92) translateY(20px); transition:transform 0.35s cubic-bezier(.2,.8,.2,1);
+}
+.modal-backdrop.open .modal-box{ transform:scale(1) translateY(0); }
+.modal-close{
+  position:absolute; top:20px; right:20px; width:36px; height:36px; border-radius:50%; border:1px solid var(--border);
+  background:var(--surface); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.25s ease;
+}
+.modal-close:hover{ background:var(--ink); border-color:var(--ink); }
+.modal-close:hover svg{ stroke:#fff; }
+.modal-close svg{ width:16px; height:16px; stroke:var(--ink); transition:stroke 0.25s ease; }
+.modal-tag{font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--signal); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px}
+.modal-box h3{font-size:1.5rem; margin-bottom:18px; padding-right:30px}
+.modal-box .modal-body{color:var(--muted); font-size:1rem; margin-bottom:24px}
+.modal-box .tag-row{margin-bottom:26px}
+.modal-links{display:flex; gap:16px; flex-wrap:wrap}
+.modal-links a{
+  font-size:0.9rem; font-weight:600; color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:6px;
+  border:1px solid var(--border-strong); padding:10px 18px; border-radius:30px; transition:all 0.25s ease;
+}
+.modal-links a:hover{ border-color:var(--signal); color:var(--signal); background:var(--signal-tint); }
+
+/* ============ EXPERIENCE ============ */
+.timeline{position:relative; padding-left:36px}
+.timeline::before{ content:''; position:absolute; left:6px; top:6px; bottom:6px; width:1px; background:linear-gradient(var(--copper-bright), var(--signal-bright)); }
 .tl-item{position:relative; margin-bottom:44px}
 .tl-item:last-child{margin-bottom:0}
 .tl-item::before{
   content:''; position:absolute; left:-36px; top:4px; width:13px; height:13px; border-radius:50%;
-  background:var(--bg); border:2px solid var(--copper-bright); box-shadow:0 0 0 4px rgba(200,138,79,0.15);
+  background:var(--paper); border:2px solid var(--copper-bright); box-shadow:0 0 0 4px rgba(168,95,38,0.12);
 }
 .tl-date{font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--signal); margin-bottom:6px}
 .tl-item h3{font-size:1.15rem; margin-bottom:8px}
-.tl-item p{color:var(--muted); font-size:0.95rem; max-width:620px}
+.tl-item p{color:var(--muted); font-size:0.95rem; max-width:640px}
 
-/* beyond */
+/* ============ BEYOND ============ */
 .beyond-row{display:grid; grid-template-columns:repeat(3,1fr); gap:22px}
-.beyond-card{background:var(--surface); border:1px solid var(--border-line); border-radius:var(--radius); padding:26px; transition:transform 0.3s ease, border-color 0.3s ease}
-.beyond-card:hover{transform:translateY(-5px); border-color:var(--signal)}
+.beyond-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:26px; transition:transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease}
+.beyond-card:hover{transform:translateY(-6px); border-color:var(--signal); box-shadow:0 20px 34px -20px rgba(14,142,126,0.3)}
 .beyond-card h3{font-size:1.05rem; margin-bottom:8px}
 .beyond-card p{color:var(--muted); font-size:0.92rem}
 
-/* contact */
+/* ============ CONTACT ============ */
 .contact-section{text-align:center}
 .contact-section .section-head{margin:0 auto 40px; text-align:center}
 .contact-links{display:flex; justify-content:center; gap:16px; flex-wrap:wrap}
 
 footer{
-  border-top:1px solid var(--border-line); padding:34px 6%; text-align:center;
+  border-top:1px solid var(--border); padding:34px 6%; text-align:center;
   font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--muted-dim);
 }
 
-@media(max-width:1000px){
-  .focus-grid{grid-template-columns:repeat(2,1fr)}
-  .reel-grid{grid-template-columns:1fr}
-}
 @media(max-width:860px){
   .hero-inner{grid-template-columns:1fr; text-align:center}
   .hero-desc{margin-left:auto; margin-right:auto}
   .cta-row{justify-content:center}
-  .hero-visual{order:-1}
+  .hero-visual{order:-1; min-height:420px}
   .about-grid{grid-template-columns:1fr}
   .projects-grid{grid-template-columns:1fr}
   .card.featured{grid-template-columns:1fr}
   .beyond-row{grid-template-columns:1fr}
-  .focus-grid{grid-template-columns:1fr}
-  .nav-links{position:fixed; top:68px; left:0; right:0; background:var(--bg-panel); flex-direction:column; padding:20px 6%; gap:18px; border-bottom:1px solid var(--border-line); display:none}
+  .focus-trigger{padding:20px}
+  .focus-panel-inner{padding:0 20px 22px 20px}
+  .nav-links{position:fixed; top:68px; left:0; right:0; background:var(--paper); flex-direction:column; padding:20px 6%; gap:18px; border-bottom:1px solid var(--border); display:none}
   .nav-links.open{display:flex}
-  .nav-toggle{display:block; background:none; border:none; color:var(--text); font-size:1.4rem; cursor:pointer}
+  .nav-toggle{display:block; background:none; border:none; color:var(--ink); font-size:1.4rem; cursor:pointer}
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -351,7 +365,6 @@ footer{
       <li><a href="#about">About</a></li>
       <li><a href="#focus">Focus</a></li>
       <li><a href="#skills">Skills</a></li>
-      <li><a href="#reel">Reel</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -363,23 +376,33 @@ footer{
 <section class="hero" id="top">
   <div class="container hero-inner">
     <div class="hero-copy">
-      <div class="eyebrow">ECE · BATCH 2023–2027 · KERALA</div>
+      <div class="eyebrow">Electronics & Communication Engineering · Class of 2027 · Kerala</div>
       <h1>Athulya <span class="accent">Sivadasan</span></h1>
       <div class="role-line"><span id="roleText">Embedded Systems Engineer</span><span class="cursor"></span></div>
-      <p class="hero-desc">Final-year Electronics & Communication Engineering student building explainable edge-AI systems — from vibration sensors to on-device LSTMs. Drawn to the layer where <strong>Edge AI</strong>, <strong>Embedded Systems & IoT</strong>, <strong>VLSI</strong>, and <strong>Robotics</strong> meet.</p>
+      <p class="hero-desc">A final-year Electronics & Communication Engineering undergraduate specializing in the convergence of embedded firmware and on-device intelligence. My work is concentrated across four interdependent disciplines — <strong>Edge AI</strong>, <strong>Embedded Systems & IoT</strong>, <strong>VLSI Design</strong>, and <strong>Robotics</strong> — translating raw sensor data into real-time, actionable inference at the hardware boundary.</p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="#projects">View Projects</a>
-        <a class="btn btn-ghost" href="mailto:i.athulyasivadasan@gmail.com">Get in Touch</a>
+        <a class="btn btn-primary" href="#projects">Examine Projects</a>
+        <a class="btn btn-ghost" href="mailto:i.athulyasivadasan@gmail.com">Initiate Contact</a>
       </div>
     </div>
+
     <div class="hero-visual">
-      <div class="hero-glow"></div>
-      <svg class="trace-ring" viewBox="0 0 400 400"><circle cx="200" cy="200" r="190"/><circle class="r2" cx="200" cy="200" r="165"/></svg>
-      <div class="node" style="top:6%; left:12%"></div>
-      <div class="node" style="bottom:10%; right:8%; animation-delay:0.8s"></div>
-      <div class="portrait-wrap">
-        <img src="athulya_portrait_transparent.png" alt="Athulya Sivadasan">
+      <svg class="collage-trace" viewBox="0 0 480 560" preserveAspectRatio="xMidYMid meet">
+        <path d="M20,60 C 120,20 200,80 260,40 S 420,10 460,70 M 40,480 C 100,520 180,470 240,510 S 400,540 450,490" />
+      </svg>
+      <div class="dot-node" style="top:8%; left:6%"></div>
+      <div class="dot-node" style="bottom:6%; right:10%; animation-delay:0.9s"></div>
+
+      <div class="photo-card">
+        <div class="frame">
+          <img src="athulya_portrait_transparent.png" alt="Athulya Sivadasan">
+        </div>
+        <div class="cap">Fig. 01 — Portrait</div>
       </div>
+
+      <div class="tag-badge b1">Edge&nbsp;AI</div>
+      <div class="tag-badge b2">Embedded&nbsp;Systems</div>
+      <div class="tag-badge b3">VLSI&nbsp;·&nbsp;Robotics</div>
     </div>
   </div>
   <div class="scroll-cue"><span class="line"></span>SCROLL</div>
@@ -389,52 +412,85 @@ footer{
   <div class="container">
     <div class="section-head reveal">
       <div class="eyebrow">Focus Areas</div>
-      <h2>Where I spend my time</h2>
-      <p>Four fields I keep circling back to — each one a different layer of the same stack, from silicon to sensor to inference.</p>
+      <h2>Where I concentrate my engineering effort</h2>
+      <p>Four disciplines I return to consistently — each a distinct layer of the same underlying stack, from silicon to sensor to inference. Select any discipline to expand its scope.</p>
     </div>
-    <div class="focus-grid">
 
-      <div class="focus-card reveal">
-        <svg class="focus-icon" viewBox="0 0 48 48" fill="none">
-          <rect x="16" y="16" width="16" height="16" rx="2" stroke="#5CE8D4" stroke-width="2"/>
-          <circle cx="24" cy="24" r="3" fill="#5CE8D4"/>
-          <path d="M24 4v10M24 34v10M4 24h10M34 24h10M10 10l7 7M31 31l7 7M38 10l-7 7M17 31l-7 7" stroke="#5CE8D4" stroke-width="1.6" stroke-linecap="round"/>
-        </svg>
-        <h3>Edge AI</h3>
-        <p>Running compact models — LSTMs, classifiers — directly on microcontrollers, so inference happens where the sensor is.</p>
+    <div class="focus-list reveal">
+
+      <div class="focus-item" data-index="01">
+        <button class="focus-trigger" aria-expanded="false">
+          <svg class="focus-icon" viewBox="0 0 48 48" fill="none">
+            <rect x="16" y="16" width="16" height="16" rx="2" stroke="#0E8E7E" stroke-width="2"/>
+            <circle cx="24" cy="24" r="3" fill="#0E8E7E"/>
+            <path d="M24 4v10M24 34v10M4 24h10M34 24h10M10 10l7 7M31 31l7 7M38 10l-7 7M17 31l-7 7" stroke="#0E8E7E" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <span class="ft-text">
+            <h3><span class="ft-num">01</span> Edge AI</h3>
+            <span class="ft-teaser">Low-latency machine intelligence deployed directly on microcontrollers.</span>
+          </span>
+          <svg class="focus-chevron" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="focus-panel">
+          <div class="focus-panel-inner">Deploying compact neural architectures — including LSTM-based sequence models — onto resource-constrained microcontrollers, enabling low-latency inference without dependence on cloud infrastructure. This work emphasizes model quantization, memory-conscious architecture selection, and deterministic real-time classification suitable for embedded deployment.</div>
+        </div>
       </div>
 
-      <div class="focus-card reveal">
-        <svg class="focus-icon" viewBox="0 0 48 48" fill="none">
-          <rect x="10" y="10" width="28" height="28" rx="3" stroke="#E8AD73" stroke-width="2"/>
-          <path d="M17 10V4M24 10V4M31 10V4M17 44v-6M24 44v-6M31 44v-6M10 17H4M10 24H4M10 31H4M44 17h-6M44 24h-6M44 31h-6" stroke="#E8AD73" stroke-width="1.6" stroke-linecap="round"/>
-          <circle cx="18" cy="18" r="1.8" fill="#E8AD73"/><circle cx="30" cy="18" r="1.8" fill="#E8AD73"/>
-          <circle cx="18" cy="30" r="1.8" fill="#E8AD73"/><circle cx="30" cy="30" r="1.8" fill="#E8AD73"/>
-        </svg>
-        <h3>Embedded Systems & IoT</h3>
-        <p>Sensor interfacing, firmware, and connected dashboards — ESP32 and Arduino builds that report on the physical world in real time.</p>
+      <div class="focus-item" data-index="02">
+        <button class="focus-trigger" aria-expanded="false">
+          <svg class="focus-icon" viewBox="0 0 48 48" fill="none">
+            <rect x="10" y="10" width="28" height="28" rx="3" stroke="#C97B34" stroke-width="2"/>
+            <path d="M17 10V4M24 10V4M31 10V4M17 44v-6M24 44v-6M31 44v-6M10 17H4M10 24H4M10 31H4M44 17h-6M44 24h-6M44 31h-6" stroke="#C97B34" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="18" cy="18" r="1.8" fill="#C97B34"/><circle cx="30" cy="18" r="1.8" fill="#C97B34"/>
+            <circle cx="18" cy="30" r="1.8" fill="#C97B34"/><circle cx="30" cy="30" r="1.8" fill="#C97B34"/>
+          </svg>
+          <span class="ft-text">
+            <h3><span class="ft-num">02</span> Embedded Systems & IoT</h3>
+            <span class="ft-teaser">Firmware and sensor-instrumentation pipelines bridging hardware and connected infrastructure.</span>
+          </span>
+          <svg class="focus-chevron" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="focus-panel">
+          <div class="focus-panel-inner">Engineering firmware and sensor-interfacing pipelines that bridge physical instrumentation with connected dashboards, using ESP32 and Arduino-based architectures to capture, process, and transmit real-world telemetry. This includes multi-sensor fusion — vibration, thermal, and current sensing — alongside asynchronous data pipelines and lightweight communication protocols suited for constrained environments.</div>
+        </div>
       </div>
 
-      <div class="focus-card reveal">
-        <svg class="focus-icon" viewBox="0 0 48 48" fill="none">
-          <rect x="12" y="6" width="24" height="36" rx="2" stroke="#5CE8D4" stroke-width="2"/>
-          <path d="M18 6v-3M30 6v-3M18 45v-3M30 45v-3M12 15H9M12 24H9M12 33H9M36 15h3M36 24h3M36 33h3" stroke="#5CE8D4" stroke-width="1.6" stroke-linecap="round"/>
-          <path d="M18 16h12M18 22h12M18 28h12M18 34h8" stroke="#5CE8D4" stroke-width="1.4" stroke-linecap="round"/>
-        </svg>
-        <h3>VLSI Design</h3>
-        <p>Designing and verifying digital logic in Verilog HDL — from gate-level building blocks up to full self-checking testbenches.</p>
+      <div class="focus-item" data-index="03">
+        <button class="focus-trigger" aria-expanded="false">
+          <svg class="focus-icon" viewBox="0 0 48 48" fill="none">
+            <rect x="12" y="6" width="24" height="36" rx="2" stroke="#0E8E7E" stroke-width="2"/>
+            <path d="M18 6v-3M30 6v-3M18 45v-3M30 45v-3M12 15H9M12 24H9M12 33H9M36 15h3M36 24h3M36 33h3" stroke="#0E8E7E" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M18 16h12M18 22h12M18 28h12M18 34h8" stroke="#0E8E7E" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          <span class="ft-text">
+            <h3><span class="ft-num">03</span> VLSI Design</h3>
+            <span class="ft-teaser">Digital logic architecture and formal verification at the gate level.</span>
+          </span>
+          <svg class="focus-chevron" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="focus-panel">
+          <div class="focus-panel-inner">Formulating and verifying digital logic architectures in Verilog HDL — from combinational and sequential building blocks to fully self-checking testbenches validated within Xilinx Vivado. This practice emphasizes rigorous functional verification and design-for-test principles, ensuring correctness ahead of physical implementation.</div>
+        </div>
       </div>
 
-      <div class="focus-card reveal">
-        <svg class="focus-icon" viewBox="0 0 48 48" fill="none">
-          <circle cx="24" cy="12" r="6" stroke="#E3B341" stroke-width="2"/>
-          <path d="M24 18v8M14 34c0-6 4-8 10-8s10 2 10 8" stroke="#E3B341" stroke-width="2" stroke-linecap="round"/>
-          <rect x="12" y="34" width="8" height="8" rx="1.5" stroke="#E3B341" stroke-width="1.8"/>
-          <rect x="28" y="34" width="8" height="8" rx="1.5" stroke="#E3B341" stroke-width="1.8"/>
-          <circle cx="21" cy="11" r="1.4" fill="#E3B341"/><circle cx="27" cy="11" r="1.4" fill="#E3B341"/>
-        </svg>
-        <h3>Robotics</h3>
-        <p>Exploring actuation and control — pairing sensing and embedded intelligence with systems that move and respond.</p>
+      <div class="focus-item" data-index="04">
+        <button class="focus-trigger" aria-expanded="false">
+          <svg class="focus-icon" viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="12" r="6" stroke="#B4830F" stroke-width="2"/>
+            <path d="M24 18v8M14 34c0-6 4-8 10-8s10 2 10 8" stroke="#B4830F" stroke-width="2" stroke-linecap="round"/>
+            <rect x="12" y="34" width="8" height="8" rx="1.5" stroke="#B4830F" stroke-width="1.8"/>
+            <rect x="28" y="34" width="8" height="8" rx="1.5" stroke="#B4830F" stroke-width="1.8"/>
+            <circle cx="21" cy="11" r="1.4" fill="#B4830F"/><circle cx="27" cy="11" r="1.4" fill="#B4830F"/>
+          </svg>
+          <span class="ft-text">
+            <h3><span class="ft-num">04</span> Robotics</h3>
+            <span class="ft-teaser">Extending embedded intelligence into physical sensing and actuation.</span>
+          </span>
+          <svg class="focus-chevron" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="focus-panel">
+          <div class="focus-panel-inner">Investigating the intersection of sensing, actuation, and embedded control — extending intelligent systems beyond passive monitoring into responsive, physically interactive behavior. Ongoing exploration includes motor control, feedback loops, and the integration of embedded intelligence with mechanical actuation.</div>
+        </div>
       </div>
 
     </div>
@@ -446,14 +502,14 @@ footer{
     <div class="about-text reveal">
       <div class="eyebrow">About</div>
       <h2 style="margin-bottom:20px;">Engineering at the sensor-to-inference boundary</h2>
-      <p>I'm a B.Tech ECE student at Ahalia School of Engineering and Technology, Palakkad, working under APJ Abdul Kalam Technological University. My focus sits where hardware meets intelligence — sensor interfacing, embedded firmware, and running machine learning models directly on microcontrollers.</p>
-      <p>I've built systems spanning predictive maintenance, digital-twin health monitoring, and VLSI design, and I actively document each build end-to-end: from schematic to deployed dashboard. Outside the lab, I compete in public speaking and shoot portrait, reel, and wildlife photography across Kerala.</p>
+      <p>I am a final-year B.Tech candidate in Electronics & Communication Engineering at Ahalia School of Engineering and Technology, affiliated with the APJ Abdul Kalam Technological University. My engineering interests are situated at the confluence of hardware and computational intelligence — specifically, sensor instrumentation, embedded firmware architecture, and the deployment of machine learning inference at the edge.</p>
+      <p>My project portfolio spans predictive maintenance systems, digital-twin health monitoring, and VLSI logic design, each documented comprehensively from schematic conception through deployed implementation. Beyond the laboratory, I engage in competitive public speaking and pursue portrait, documentary, and wildlife photography across the Kerala landscape.</p>
     </div>
     <div class="stat-panel reveal">
-      <div class="stat"><div class="num" data-count="7.15">0</div><div class="label">CGPA / Sem 5</div></div>
-      <div class="stat"><div class="num" data-count="5">0</div><div class="label">Systems Built</div></div>
-      <div class="stat"><div class="num" data-count="2">0</div><div class="label">Internships</div></div>
-      <div class="stat"><div class="num" data-count="4">0</div><div class="label">Core Focus Areas</div></div>
+      <div class="stat"><div class="num" data-count="7.15">0</div><div class="label">CGPA / Semester V</div></div>
+      <div class="stat"><div class="num" data-count="5">0</div><div class="label">Systems Engineered</div></div>
+      <div class="stat"><div class="num" data-count="2">0</div><div class="label">Industry Internships</div></div>
+      <div class="stat"><div class="num" data-count="4">0</div><div class="label">Core Disciplines</div></div>
     </div>
   </div>
 </section>
@@ -462,28 +518,28 @@ footer{
   <div class="container">
     <div class="section-head reveal">
       <div class="eyebrow">Skills</div>
-      <h2>Toolkit</h2>
-      <p>The stack I reach for when a project needs to move from breadboard to firmware to dashboard.</p>
+      <h2>Engineering Toolkit</h2>
+      <p>The instruments, languages, and platforms I employ to advance a concept from breadboard prototype to deployed firmware.</p>
     </div>
 
     <div class="tray-group reveal">
       <div class="tray-title">Embedded, IoT & Robotics</div>
       <div class="chip-row">
-        <span class="chip">ESP32</span><span class="chip">Arduino</span><span class="chip">Sensor Interfacing</span>
-        <span class="chip">Circuit Design</span><span class="chip">Actuators & Control</span><span class="chip">Robotics Prototyping</span>
+        <span class="chip">ESP32</span><span class="chip">Arduino</span><span class="chip">Sensor Instrumentation</span>
+        <span class="chip">Circuit Design</span><span class="chip">Actuation & Control</span><span class="chip">Robotics Prototyping</span>
       </div>
     </div>
     <div class="tray-group reveal">
       <div class="tray-title">Edge AI & Software</div>
       <div class="chip-row">
-        <span class="chip">TensorFlow Lite Micro</span><span class="chip">LSTM Models</span><span class="chip">Python</span>
+        <span class="chip">TensorFlow Lite Micro</span><span class="chip">LSTM Architectures</span><span class="chip">Python</span>
         <span class="chip">C</span><span class="chip">C++</span><span class="chip">MATLAB</span><span class="chip">LTspice</span>
       </div>
     </div>
     <div class="tray-group reveal">
       <div class="tray-title">VLSI</div>
       <div class="chip-row">
-        <span class="chip">Verilog HDL</span><span class="chip">Xilinx Vivado</span><span class="chip">Testbench Design</span>
+        <span class="chip">Verilog HDL</span><span class="chip">Xilinx Vivado</span><span class="chip">Testbench Verification</span>
       </div>
     </div>
     <div class="tray-group reveal">
@@ -496,98 +552,32 @@ footer{
   </div>
 </section>
 
-<section id="reel">
-  <div class="container">
-    <div class="section-head reveal">
-      <div class="eyebrow">Build Reel</div>
-      <h2>See it running</h2>
-      <p>Short clips from the bench — hardware in motion, dashboards live, boards under test.</p>
-    </div>
-
-    <div class="reel-grid">
-
-      <div class="reel-card reveal">
-        <div class="reel-frame">
-          <video muted loop playsinline preload="none" poster="media/predicta-poster.jpg">
-            <source src="media/predicta-demo.mp4" type="video/mp4">
-          </video>
-          <button class="reel-play" aria-label="Play video">
-            <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="27" fill="rgba(8,11,19,0.55)" stroke="#5CE8D4" stroke-width="2"/><polygon points="23,17 23,39 40,28" fill="#5CE8D4"/></svg>
-          </button>
-        </div>
-        <div class="reel-meta">
-          <span class="card-tag">Edge AI · Embedded</span>
-          <h3>Predicta — Live on the Bench</h3>
-          <p>Vibration, temperature, and current fused on an ESP32, classified in real time by an on-device LSTM.</p>
-        </div>
-      </div>
-
-      <div class="reel-card reveal">
-        <div class="reel-frame">
-          <video muted loop playsinline preload="none" poster="media/vlsi-poster.jpg">
-            <source src="media/vlsi-waveform-walkthrough.mp4" type="video/mp4">
-          </video>
-          <button class="reel-play" aria-label="Play video">
-            <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="27" fill="rgba(8,11,19,0.55)" stroke="#E8AD73" stroke-width="2"/><polygon points="23,17 23,39 40,28" fill="#E8AD73"/></svg>
-          </button>
-        </div>
-        <div class="reel-meta">
-          <span class="card-tag">VLSI · Vivado</span>
-          <h3>32-bit ALU — Waveform Walkthrough</h3>
-          <p>A guided look at the simulation output and testbench behaviour behind the ALU design.</p>
-        </div>
-      </div>
-
-      <div class="reel-card reveal">
-        <div class="reel-frame">
-          <video muted loop playsinline preload="none" poster="media/robotics-poster.jpg">
-            <source src="media/robotics-bench-test.mp4" type="video/mp4">
-          </video>
-          <button class="reel-play" aria-label="Play video">
-            <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="27" fill="rgba(8,11,19,0.55)" stroke="#E3B341" stroke-width="2"/><polygon points="23,17 23,39 40,28" fill="#E3B341"/></svg>
-          </button>
-        </div>
-        <div class="reel-meta">
-          <span class="card-tag">Robotics · IoT</span>
-          <h3>Sensing & Actuation Bench Test</h3>
-          <p>An early look at pairing sensor input with actuated response — the robotics side of the toolkit.</p>
-        </div>
-      </div>
-
-    </div>
-    <p class="reel-note">△ Drop your own .mp4 files into /media (matching the filenames above) to bring these to life — the players, posters, and play controls are already wired up.</p>
-  </div>
-</section>
-
 <section id="projects">
   <div class="container">
     <div class="section-head reveal">
       <div class="eyebrow">Projects</div>
-      <h2>Selected Builds</h2>
-      <p>Each project pairs a real sensing problem with an on-device or connected intelligence layer.</p>
+      <h2>Selected Engineering Builds</h2>
+      <p>Each project pairs a substantive sensing problem with an on-device or connected intelligence layer. Select any build to review its complete technical scope.</p>
     </div>
 
     <div class="projects-grid">
 
-      <div class="card featured reveal">
+      <button class="card featured reveal" data-project="predicta">
         <div>
           <div class="card-top"><span class="led"></span><span class="card-tag">Flagship · NeST Digital Internship</span></div>
           <h3>Predicta — Edge-AI Predictive Maintenance</h3>
-          <p>An on-device predictive maintenance system for rotating machinery. An ESP32 fuses vibration (MPU6050), temperature (DS18B20), and current (ACS712) readings, then runs an LSTM via TensorFlow Lite for Microcontrollers to classify machine health across five states — Normal, Watch, Warning, Critical, Failure — streamed live to a Progressive Web App dashboard.</p>
+          <p>An edge-deployed predictive maintenance architecture for rotating machinery, fusing multi-sensor telemetry with on-device sequence modeling.</p>
           <div class="tag-row">
             <span class="tag">ESP32</span><span class="tag">LSTM</span><span class="tag">TFLite Micro</span><span class="tag">ThingSpeak</span><span class="tag">PWA</span>
           </div>
-          <div class="card-links">
-            <a href="https://github.com/Athulya-Sivadasan/dc-motor-predictive-maintenance" target="_blank" rel="noopener">GitHub Repo ↗</a>
-            <a href="https://athulya-sivadasan.github.io/dc-motor-predictive-maintenance/" target="_blank" rel="noopener">Live Dashboard ↗</a>
-          </div>
+          <div class="card-cta">Review Full Specification <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
         <div>
           <svg class="spark" viewBox="0 0 300 110" preserveAspectRatio="none">
             <defs>
               <linearGradient id="sparkfill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#5CE8D4" stop-opacity="0.35"/>
-                <stop offset="100%" stop-color="#5CE8D4" stop-opacity="0"/>
+                <stop offset="0%" stop-color="#0E8E7E" stop-opacity="0.30"/>
+                <stop offset="100%" stop-color="#0E8E7E" stop-opacity="0"/>
               </linearGradient>
             </defs>
             <path class="fill" id="sparkFillPath" d=""/>
@@ -597,40 +587,39 @@ footer{
             <span>VIBRATION · TEMP · CURRENT</span><span style="color:var(--signal)">● LIVE FEED</span>
           </div>
         </div>
-      </div>
+      </button>
 
-      <div class="card reveal">
-        <div class="card-top"><span class="led" style="background:var(--copper-bright); box-shadow:0 0 8px var(--copper-bright)"></span><span class="card-tag">AI Web App</span></div>
+      <button class="card reveal" data-project="surebae">
+        <div class="card-top"><span class="led" style="background:var(--copper-bright); box-shadow:0 0 0 3px rgba(201,123,52,0.15)"></span><span class="card-tag">AI Web Application</span></div>
         <h3>Sure Bae</h3>
-        <p>An AI study assistant with a ghost mascot — "No Yap. Just Facts." Powered by Mistral AI through a Cloudflare Worker proxy for fast, no-nonsense answers.</p>
+        <p>A conversational AI study companion engineered for concise, distraction-free academic assistance.</p>
         <div class="tag-row"><span class="tag">Mistral AI</span><span class="tag">Cloudflare Workers</span></div>
-        <div class="card-links">
-          <a href="https://github.com/Athulya-Sivadasan/sure-bae" target="_blank" rel="noopener">GitHub ↗</a>
-          <a href="https://athulya-sivadasan.github.io/sure-bae" target="_blank" rel="noopener">Live App ↗</a>
-        </div>
-      </div>
+        <div class="card-cta">Review Full Specification <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </button>
 
-      <div class="card reveal">
-        <div class="card-top"><span class="led" style="background:var(--amber); box-shadow:0 0 8px var(--amber)"></span><span class="card-tag">KTU Mini Project</span></div>
+      <button class="card reveal" data-project="ultrasmart">
+        <div class="card-top"><span class="led" style="background:var(--amber); box-shadow:0 0 0 3px rgba(180,131,15,0.15)"></span><span class="card-tag">KTU Mini Project</span></div>
         <h3>UltraSmart One</h3>
-        <p>IoT-based smart urban management system integrating water management, smart parking, and waste monitoring on ESP32 with a live web dashboard.</p>
+        <p>An integrated IoT framework addressing urban infrastructure monitoring across three civic domains.</p>
         <div class="tag-row"><span class="tag">ESP32</span><span class="tag">IoT</span><span class="tag">Dashboard</span></div>
-      </div>
+        <div class="card-cta">Review Full Specification <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </button>
 
-      <div class="card reveal">
+      <button class="card reveal" data-project="fireguard">
         <div class="card-top"><span class="led"></span><span class="card-tag">Team Project · NeST Digital</span></div>
         <h3>FireGuard</h3>
-        <p>Smart gas leakage and fire detection system with a three-tier alert pipeline, built with MQ-5 gas and DHT11 sensors on Arduino.</p>
+        <p>A tiered gas leakage and fire detection system engineered for early-stage hazard response.</p>
         <div class="tag-row"><span class="tag">Arduino</span><span class="tag">MQ-5</span><span class="tag">DHT11</span></div>
-        <div class="card-links"><a href="https://wokwi.com/makers/athulya_sivadasan" target="_blank" rel="noopener">Wokwi Sim ↗</a></div>
-      </div>
+        <div class="card-cta">Review Full Specification <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </button>
 
-      <div class="card reveal">
-        <div class="card-top"><span class="led" style="background:var(--copper-bright); box-shadow:0 0 8px var(--copper-bright)"></span><span class="card-tag">VLSI · Vaidsys Technologies</span></div>
+      <button class="card reveal" data-project="alu">
+        <div class="card-top"><span class="led" style="background:var(--copper-bright); box-shadow:0 0 0 3px rgba(201,123,52,0.15)"></span><span class="card-tag">VLSI · Vaidsys Technologies</span></div>
         <h3>32-bit ALU</h3>
-        <p>A 32-bit Arithmetic Logic Unit designed in Verilog HDL on Xilinx Vivado, verified end-to-end with a self-checking testbench and reviewed externally.</p>
+        <p>A 32-bit Arithmetic Logic Unit engineered and formally verified in Verilog HDL.</p>
         <div class="tag-row"><span class="tag">Verilog HDL</span><span class="tag">Xilinx Vivado</span></div>
-      </div>
+        <div class="card-cta">Review Full Specification <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </button>
 
     </div>
   </div>
@@ -646,12 +635,12 @@ footer{
       <div class="tl-item reveal">
         <div class="tl-date">2026 · KAKANAD, KOCHI</div>
         <h3>Embedded Systems & IoT Intern — NeST Digital</h3>
-        <p>Designed and deployed Predicta end-to-end: sensor integration, on-device LSTM inference, and a live PWA dashboard. Also contributed to FireGuard, a team-built gas and fire detection system. Gained hands-on experience in hardware implementation, project documentation, and testing workflows.</p>
+        <p>Architected and deployed Predicta in its entirety — encompassing sensor integration, on-device LSTM inference, and a live Progressive Web Application dashboard. Concurrently contributed to FireGuard, a collaboratively engineered gas and fire detection system. This engagement provided substantive exposure to hardware implementation practices, technical documentation standards, and structured testing methodologies.</p>
       </div>
       <div class="tl-item reveal">
         <div class="tl-date">VLSI DESIGN</div>
         <h3>VLSI Design Intern — Vaidsys Technologies</h3>
-        <p>Designed and verified a 32-bit ALU in Verilog HDL using Xilinx Vivado, building a self-checking testbench and presenting the work for external review.</p>
+        <p>Engineered and formally verified a 32-bit Arithmetic Logic Unit in Verilog HDL using Xilinx Vivado, constructing a self-checking testbench methodology and presenting the completed design for external technical evaluation.</p>
       </div>
     </div>
   </div>
@@ -661,20 +650,20 @@ footer{
   <div class="container">
     <div class="section-head reveal">
       <div class="eyebrow">Beyond the Bench</div>
-      <h2>Outside the Lab</h2>
+      <h2>Outside the Laboratory</h2>
     </div>
     <div class="beyond-row">
       <div class="beyond-card reveal">
         <h3>Public Speaking</h3>
-        <p>Competitive Malayalam-language speaker and English extempore winner — first prize at school level.</p>
+        <p>A competitive Malayalam-language orator and English extemporaneous speaking champion, recognized with a first-place distinction at the school level.</p>
       </div>
       <div class="beyond-card reveal">
         <h3>Content Creation</h3>
-        <p>Shoots portraits, reels, and nature & wildlife photography and videography across Kerala.</p>
+        <p>Practices portrait, cinematic reel, and wildlife photography and videography across the diverse landscapes of Kerala.</p>
       </div>
       <div class="beyond-card reveal">
         <h3>Robotics Tinkering</h3>
-        <p>Independent exploration of sensing and actuation outside coursework — the earliest stage of the robotics side of the toolkit.</p>
+        <p>Pursues independent exploration of sensing and actuation systems beyond formal coursework — the nascent stage of an evolving robotics practice.</p>
       </div>
     </div>
   </div>
@@ -684,8 +673,8 @@ footer{
   <div class="container">
     <div class="section-head reveal">
       <div class="eyebrow" style="justify-content:center">Contact</div>
-      <h2>Let's Connect</h2>
-      <p>Open to Embedded AI / IoT roles, collaborations, and conversations about edge intelligence.</p>
+      <h2>Let's Collaborate</h2>
+      <p>Receptive to opportunities in Embedded AI and IoT engineering, research collaborations, and substantive discourse on edge intelligence architectures.</p>
     </div>
     <div class="contact-links reveal">
       <a class="btn btn-primary" href="mailto:i.athulyasivadasan@gmail.com">Email</a>
@@ -700,6 +689,18 @@ footer{
   DESIGNED &amp; DEVELOPED BY ATHULYA SIVADASAN © 2026
 </footer>
 
+<!-- ===== Project detail modal ===== -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal-box" id="modalBox" role="dialog" aria-modal="true">
+    <button class="modal-close" id="modalClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke-width="2" stroke-linecap="round"/></svg></button>
+    <div class="modal-tag" id="modalTag"></div>
+    <h3 id="modalTitle"></h3>
+    <p class="modal-body" id="modalBody"></p>
+    <div class="tag-row" id="modalTags"></div>
+    <div class="modal-links" id="modalLinks"></div>
+  </div>
+</div>
+
 <script>
 // mobile nav
 const navToggle = document.getElementById('navToggle');
@@ -708,7 +709,7 @@ navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
 navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
 
 // role text cycling
-const roles = ['Embedded Systems Engineer','IoT Developer','Edge AI Enthusiast','VLSI Design Intern','Robotics Explorer'];
+const roles = ['Embedded Systems Engineer','Edge Intelligence Practitioner','VLSI & Digital Logic Designer','Applied Robotics Enthusiast'];
 let roleIdx = 0;
 const roleEl = document.getElementById('roleText');
 roleEl.style.transition = 'opacity 0.3s ease';
@@ -735,7 +736,7 @@ if(window.matchMedia('(pointer:fine)').matches){
   window.addEventListener('mouseleave', () => glow.style.opacity = '0');
 }
 
-// power rail: scroll progress + active node
+// power rail
 const railFill = document.getElementById('railFill');
 const railNodes = document.querySelectorAll('.rail-node');
 const railTargets = { top: '#top', focus: '#focus', projects: '#projects', experience: '#experience', contact: '#contact' };
@@ -744,7 +745,6 @@ railNodes.forEach(n => {
     const sel = railTargets[n.dataset.target];
     if(sel) document.querySelector(sel)?.scrollIntoView({behavior:'smooth'});
   });
-  n.style.cursor = 'pointer';
 });
 function updateRail(){
   const doc = document.documentElement;
@@ -782,20 +782,20 @@ const statIO = new IntersectionObserver((entries) => {
 }, { threshold:0.5 });
 statEls.forEach(el => statIO.observe(el));
 
-// video reel: click-to-play with graceful fallback if no source file present
-document.querySelectorAll('.reel-card').forEach(card => {
-  const video = card.querySelector('video');
-  const playBtn = card.querySelector('.reel-play');
-  playBtn.addEventListener('click', () => {
-    video.play().then(() => {
-      playBtn.classList.add('hidden');
-    }).catch(() => {
-      // no video file at that path yet — keep poster + play control visible
-      playBtn.classList.remove('hidden');
+// focus accordion — click to reveal detail (single-open)
+document.querySelectorAll('.focus-trigger').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.focus-item');
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.focus-item.open').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.focus-trigger').setAttribute('aria-expanded','false');
     });
+    if(!wasOpen){
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded','true');
+    }
   });
-  video.addEventListener('pause', () => playBtn.classList.remove('hidden'));
-  video.addEventListener('ended', () => playBtn.classList.remove('hidden'));
 });
 
 // sparkline draw-in for Predicta card
@@ -819,6 +819,83 @@ const sparkObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.3 });
 sparkObserver.observe(document.querySelector('.card.featured'));
+
+// ===== Project detail modal =====
+const projectData = {
+  predicta: {
+    tag: 'Flagship · NeST Digital Internship',
+    title: 'Predicta — Edge-AI Predictive Maintenance',
+    body: 'Predicta is an autonomous predictive maintenance architecture engineered for rotating machinery diagnostics. An ESP32 microcontroller aggregates vibration (MPU6050), thermal (DS18B20), and current (ACS712) telemetry, which is subsequently processed through an LSTM-based sequence model deployed via TensorFlow Lite for Microcontrollers. The system classifies operative machine health across five discrete states — Normal, Watch, Warning, Critical, and Failure — with results relayed in real time to a Progressive Web Application dashboard for continuous operational visibility.',
+    tags: ['ESP32','LSTM','TFLite Micro','ThingSpeak','PWA'],
+    links: [
+      {label:'GitHub Repository', href:'https://github.com/Athulya-Sivadasan/dc-motor-predictive-maintenance'},
+      {label:'Live Dashboard', href:'https://athulya-sivadasan.github.io/dc-motor-predictive-maintenance/'}
+    ]
+  },
+  surebae: {
+    tag: 'AI Web Application',
+    title: 'Sure Bae',
+    body: 'Sure Bae is an AI-driven study assistant designed around a minimalist interaction philosophy — "No Yap. Just Facts." The application is powered by the Mistral AI language model, routed through a Cloudflare Worker functioning as a lightweight, low-latency proxy layer, delivering rapid and unembellished responses to academic queries.',
+    tags: ['Mistral AI','Cloudflare Workers'],
+    links: [
+      {label:'GitHub Repository', href:'https://github.com/Athulya-Sivadasan/sure-bae'},
+      {label:'Live Application', href:'https://athulya-sivadasan.github.io/sure-bae'}
+    ]
+  },
+  ultrasmart: {
+    tag: 'KTU Mini Project',
+    title: 'UltraSmart One',
+    body: 'UltraSmart One is an IoT-based smart urban management framework unifying water resource monitoring, smart parking allocation, and waste-level sensing within a single ESP32-driven architecture, surfaced through a real-time web dashboard for municipal-scale visibility.',
+    tags: ['ESP32','IoT','Dashboard'],
+    links: []
+  },
+  fireguard: {
+    tag: 'Team Project · NeST Digital',
+    title: 'FireGuard',
+    body: 'FireGuard is a collaboratively engineered gas leakage and fire detection system incorporating a three-tier alerting pipeline. Built on an Arduino platform with MQ-5 gas and DHT11 environmental sensors, the system is designed to escalate hazard response proportionally to detected severity.',
+    tags: ['Arduino','MQ-5','DHT11'],
+    links: [
+      {label:'Wokwi Simulation', href:'https://wokwi.com/makers/athulya_sivadasan'}
+    ]
+  },
+  alu: {
+    tag: 'VLSI · Vaidsys Technologies',
+    title: '32-bit ALU',
+    body: 'This project comprises the architecture and verification of a 32-bit Arithmetic Logic Unit implemented in Verilog HDL within the Xilinx Vivado design environment. The design was validated through a self-checking testbench methodology and subsequently subjected to external technical review.',
+    tags: ['Verilog HDL','Xilinx Vivado'],
+    links: []
+  }
+};
+
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalTag = document.getElementById('modalTag');
+const modalTitle = document.getElementById('modalTitle');
+const modalBody = document.getElementById('modalBody');
+const modalTags = document.getElementById('modalTags');
+const modalLinks = document.getElementById('modalLinks');
+const modalClose = document.getElementById('modalClose');
+
+function openModal(key){
+  const data = projectData[key];
+  if(!data) return;
+  modalTag.textContent = data.tag;
+  modalTitle.textContent = data.title;
+  modalBody.textContent = data.body;
+  modalTags.innerHTML = data.tags.map(t => `<span class="tag">${t}</span>`).join('');
+  modalLinks.innerHTML = data.links.map(l => `<a href="${l.href}" target="_blank" rel="noopener">${l.label} ↗</a>`).join('');
+  modalBackdrop.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  modalBackdrop.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('[data-project]').forEach(card => {
+  card.addEventListener('click', () => openModal(card.dataset.project));
+});
+modalClose.addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', (e) => { if(e.target === modalBackdrop) closeModal(); });
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
 </script>
 </body>
 </html>
